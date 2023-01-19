@@ -65,18 +65,18 @@ export function AddCard(props) {
     }, [])
 
     useEffect(() => {
-        if(scannedURL.length > 0){
+        if(scannedURL.length > 0) {
             console.log(`COMPONENT AddCard: Scanned URL: ${scannedURL}`);
-            try {
-                setScanningError("");
-                let query = scannedURL.split('?')[1].split('&');
-                let card_id, card_cvc = null;
+            setScanningError("");
+            let query = scannedURL.split('?')[1].split('&');
+            let card_id, card_cvc = null;
 
-                query.forEach((el, index) => {
-                    if(el.includes('card_id')){ card_id =  query[index].split('=')[1]}
-                    if(el.includes('card_cvc')){ card_cvc =  query[index].split('=')[1]}
-                });
-    
+            query.forEach((el, index) => {
+                if(el.includes('card_id')){ card_id =  query[index].split('=')[1]}
+                if(el.includes('card_cvc')){ card_cvc =  query[index].split('=')[1]}
+            });
+
+            if(card_id && card_cvc) { 
                 let card = {
                     'id': card_id,
                     'cvc': card_cvc,
@@ -84,16 +84,14 @@ export function AddCard(props) {
         
                 cardNumRef.current.value = card.id;
                 cardCVCRef.current.value = card.cvc;
-
+    
                 console.log("COMPONENT AddCard: Saving Card Details");
                 dispatch(saveCardDetails(card));
                 setScanningSuccess("");
                 setScanningError("");
                 setHasScannedOnce(true);
-            } catch(e) {
-                console.log("COMPONENT AddCard: Invalid URL");
-                setTotalScanningErrors(totalScanningErrors + 1);
-                setScanningError("Error Scanning Card, Try Scaning Again");
+            } else { // Card id or cvc field was not retrieved from the URL
+                setScanningError('Card Scanning Error. Try Again.') 
             }
         }
     }, [scannedURL])
@@ -103,6 +101,7 @@ export function AddCard(props) {
             console.log("COMPONENT AddCard: Scanning Error, Remove Scanning");
             // Reset Camera Button, Remove Scanning
             // User can enter detials manually or try scanning again
+            setTotalScanningErrors(totalScanningErrors + 1);
             setScanning(false);
         }
         if(scanningError && !hasScannedOnce) { // ReactZxing error on initial render is ignored
@@ -124,7 +123,8 @@ export function AddCard(props) {
         if(app.hasCardDetailsSavingError){
             console.log("COMPONENT AddCard: Card Details Saving Error");
             setSubmissionSuccess("");
-            setSubmissionError(`${app.cardDetailsSavingError}. Check Card Details & Try Again.`);
+            let error = app.cardDetailsSavingError.split(' ').map(elem => elem[0].toUpperCase()+ elem.slice(1)).join(' '); // Capitalize first letter of each word
+            setSubmissionError(`${error}. Check Card Details & Try Again.`);
         }
     }, [app.isCardDetailsSaving, app.hasCardDetailsSaved, app.hasCardDetailsSavingError, app.cardDetailsSavingError, app.card])
 
@@ -137,7 +137,8 @@ export function AddCard(props) {
         if(app.hasCardDetailsVerifyingError){
             console.log("COMPONENT AddCard: Card Details Verifying Error");
             setSubmissionSuccess("");
-            setSubmissionError(`${app.verifyCardDetailsError}. Check Card Details & Try Again.`);
+            let error = app.verifyCardDetailsError.split(' ').map(elem => elem[0].toUpperCase()+ elem.slice(1)).join(' '); // Capitalize first letter of each word 
+            setSubmissionError(`${error}. Check Card Details & Try Again.`);
         }
     }, [app.isCardDetailsVerifying, app.hasCardDetailsVerified, app.hasCardDetailsVerifyingError, app.verifyCardDetailsError])
 
