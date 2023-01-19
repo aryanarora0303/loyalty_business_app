@@ -40,7 +40,7 @@ export function ScanCard(props) {
     }, [])
 
     return (
-        <div className='mb-7'>
+        <div className={`mb-7 ${(!props.scanning) ? 'hidden' : ''}`}>
             <label className="block mb-2 text-coolGray-500 text-xxs" htmlFor="">Scan QR Code on Back of the Loyalty Card</label>
             <video className='rounded-md shadow-md' ref={ref}/>
             {/* <p>Result: {resultText}</p> */}

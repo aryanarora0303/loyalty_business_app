@@ -68,6 +68,8 @@ export function AddCard(props) {
         if(scannedURL.length > 0) {
             console.log(`COMPONENT AddCard: Scanned URL: ${scannedURL}`);
             setScanningError("");
+            setScanning(false);
+
             let query = scannedURL.split('?')[1].split('&');
             let card_id, card_cvc = null;
 
@@ -93,7 +95,7 @@ export function AddCard(props) {
             } else { // Card id or cvc field was not retrieved from the URL
                 setScanningError('Card Scanning Error. Try Again.') 
             }
-        }
+        } 
     }, [scannedURL])
 
     useEffect(() => {
@@ -187,7 +189,8 @@ export function AddCard(props) {
                         {/* Buttons for scanning card & getting promos */}
                         <div className="mb-3">
                             <div className='flex'>
-                                <button className={`inline-block py-3 px-7 mt-2 mb-3 w-full text-base text-white font-medium text-center leading-6 bg-gray-400 hover:bg-gray-500 focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 rounded-md shadow-md hover:shadow-lg transition-all ${(!hasCamera) ? '!disabled !disabled:opacity-50 !cursor-not-allowed' : ''}'}`} 
+                                <button className={`inline-block py-3 px-7 mt-2 mb-3 w-full text-base text-white font-medium text-center leading-6 bg-gray-400 hover:bg-gray-500 focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 rounded-md shadow-md hover:shadow-lg transition-all ${(!hasCamera) ? 'disabled:opacity-75 cursor-not-allowed hover:bg-gray-400' : ''}'}`} 
+                                    disabled={(!hasCamera) ? 'true' : 'false'}
                                     onClick={(event) => scanCardHandler(event)}>
                                     {(hasCamera) ? <i className="fa-solid fa-camera mr-2" /> : <i className="fa-solid fa-ban mr-2" />}
                                     Scan Card
@@ -258,7 +261,7 @@ export function AddCard(props) {
                             {/* : ''
                         } */}
                         
-                        {(scanning) ? <ScanCard setScannedURL={setScannedURL} setScanningError={setScanningError}/> : ""}
+                        <ScanCard scanning={scanning} setScannedURL={setScannedURL} setScanningError={setScanningError}/>
                     </div>
                     {/* <- Scanning Card */}
                     
