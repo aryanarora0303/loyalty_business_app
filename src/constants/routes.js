@@ -1,0 +1,5 @@
+export const HOME_PAGE = '/'
+export const DASHBOARD = '/dashboard'
+export const SIGN_IN = '/sign-in'
+export const SCAN = '/scan'
+export const SETTINGS = '/settings'
