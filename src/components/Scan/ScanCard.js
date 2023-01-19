@@ -30,7 +30,10 @@ export function ScanCard(props) {
             props.setScannedURL(url);
         },
         onError(err) {
-            props.setScanningError("Error Scanning Code, Try Entering Details Manually");
+            // ---------|
+            // IMPORTANT: React Zxing default timeBetweenDecodingAttempts is 300ms, onError is called if after every attempt a QR Code has error scanning or is not found. "QR is not found" Buggy behaviour. Therefore, removing it from setting error.
+            // ---------|
+            //props.setScanningError("Error Scanning Code, Try Entering Details Manually");
         }
     });
 
@@ -40,7 +43,7 @@ export function ScanCard(props) {
     }, [])
 
     return (
-        <div className={`mb-7 ${(!props.scanning) ? 'hidden' : ''}`}>
+        <div className={`mb-7`}>
             <label className="block mb-2 text-coolGray-500 text-xxs" htmlFor="">Scan QR Code on Back of the Loyalty Card</label>
             <video className='rounded-md shadow-md' ref={ref}/>
             {/* <p>Result: {resultText}</p> */}

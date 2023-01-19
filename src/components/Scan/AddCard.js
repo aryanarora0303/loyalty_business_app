@@ -112,6 +112,7 @@ export function AddCard(props) {
 
         if(scanningError && totalScanningErrors >= 3){
             // Failed twice(first: ReactZxing error on initial render + 2 more failes)
+            setScanningError('Persistant Card Scanning Error. Try Entering Card Details Manually');
             setHasCamera(false);
         }
     }, [scanningError])
@@ -190,7 +191,7 @@ export function AddCard(props) {
                         <div className="mb-3">
                             <div className='flex'>
                                 <button className={`inline-block py-3 px-7 mt-2 mb-3 w-full text-base text-white font-medium text-center leading-6 bg-gray-400 hover:bg-gray-500 focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 rounded-md shadow-md hover:shadow-lg transition-all ${(!hasCamera) ? 'disabled:opacity-75 cursor-not-allowed hover:bg-gray-400' : ''}'}`} 
-                                    disabled={(!hasCamera) ? 'true' : 'false'}
+                                    disabled={!hasCamera}
                                     onClick={(event) => scanCardHandler(event)}>
                                     {(hasCamera) ? <i className="fa-solid fa-camera mr-2" /> : <i className="fa-solid fa-ban mr-2" />}
                                     Scan Card
@@ -201,7 +202,7 @@ export function AddCard(props) {
                             {(!hasCamera) ?
                                 <div className='flex items-center my-1 mb-4 px-2 py-1 leading-5 border-[0.5px] border-[#cc0f35] bg-[#feecf0] rounded-lg shadow-sm'>
                                     <p className='text-[#cc0f35] text-xxs font-medium'>
-                                        ALERT: Device Camera NOT Available, Enter Card Details Manually Below.
+                                        ALERT: Device Camera NOT Available, Enter Card Details Manually Below(or Refresh Page if you think its an error).
                                     </p>
                                 </div>
                                 : ''
@@ -261,7 +262,7 @@ export function AddCard(props) {
                             {/* : ''
                         } */}
                         
-                        <ScanCard scanning={scanning} setScannedURL={setScannedURL} setScanningError={setScanningError}/>
+                        {(scanning) ? <ScanCard scanning={scanning} setScannedURL={setScannedURL} setScanningError={setScanningError}/> : ''}
                     </div>
                     {/* <- Scanning Card */}
                     
