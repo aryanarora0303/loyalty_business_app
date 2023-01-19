@@ -1,6 +1,7 @@
 // React Imports
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+// import { useState } from 'react';
 
 // Redux Imports
 
@@ -16,7 +17,7 @@ import * as ROUTES from '../../constants/routes';
 import './ScanCard.css';
 
 export function ScanCard(props) {
-    const [resultText, setResultText] = useState('');
+    // const [resultText, setResultText] = useState('');
 
     const { ref } = useZxing({
         onResult(result) {
@@ -25,8 +26,8 @@ export function ScanCard(props) {
             // ---------|
             // IMPORTANT: React Zxing can only update one state variable, more than one will cause errors
             // ---------|
-            setResultText(url); 
-            //props.setScannedURL(url);
+            //setResultText(url); 
+            props.setScannedURL(url);
         },
         onError(err) {
             props.setScanningError("Error Scanning Code, Try Entering Details Manually");
@@ -42,7 +43,7 @@ export function ScanCard(props) {
         <div className='mb-7'>
             <label className="block mb-2 text-coolGray-500 text-xxs" htmlFor="">Scan QR Code on Back of the Loyalty Card</label>
             <video className='rounded-md shadow-md' ref={ref}/>
-            <p>Result: {resultText}</p>
+            {/* <p>Result: {resultText}</p> */}
         </div>
     );
 }

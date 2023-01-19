@@ -40,6 +40,7 @@ export function AddCard(props) {
     const [scanningSuccess, setScanningSuccess] = useState('');  // Stores scanned success
 
     const [submissionError, setSubmissionError] = useState(''); // Store form submission(card saving & verification) error
+    const [submissionSuccess, setSubmissionSuccess] = useState(''); // Store form submission success
 
     const [customerPromos, setCustomerPromos] = useState('');
 
@@ -83,7 +84,7 @@ export function AddCard(props) {
         
                 cardNumRef.current.value = card.id;
                 cardCVCRef.current.value = card.cvc;
-                
+
                 console.log("COMPONENT AddCard: Saving Card Details");
                 dispatch(saveCardDetails(card));
                 setScanningSuccess("");
@@ -122,7 +123,7 @@ export function AddCard(props) {
 
         if(app.hasCardDetailsSavingError){
             console.log("COMPONENT AddCard: Card Details Saving Error");
-            setScanningSuccess("");
+            setSubmissionSuccess("");
             setSubmissionError(`${app.cardDetailsSavingError}. Check Card Details & Try Again.`);
         }
     }, [app.isCardDetailsSaving, app.hasCardDetailsSaved, app.hasCardDetailsSavingError, app.cardDetailsSavingError, app.card])
@@ -130,12 +131,12 @@ export function AddCard(props) {
     useEffect(() => {
         if(app.hasCardDetailsVerified){
             console.log("COMPONENT AddCard: Card Details Verified");
-            setScanningSuccess("Verified");
+            setSubmissionSuccess("Verified");
         }
 
         if(app.hasCardDetailsVerifyingError){
             console.log("COMPONENT AddCard: Card Details Verifying Error");
-            setScanningSuccess("");
+            setSubmissionSuccess("");
             setSubmissionError(`${app.verifyCardDetailsError}. Check Card Details & Try Again.`);
         }
     }, [app.isCardDetailsVerifying, app.hasCardDetailsVerified, app.hasCardDetailsVerifyingError, app.verifyCardDetailsError])
@@ -201,6 +202,23 @@ export function AddCard(props) {
                                 </div>
                                 : ''
                             }
+
+                            {/* Alert Message when camera available, submissio error */}
+                            {(hasCamera && submissionError) ?
+                                <div className='flex items-center my-1 mb-4 px-2 py-1 leading-5 border-[0.5px] border-[#cc0f35] bg-[#feecf0] rounded-lg shadow-sm'>
+                                    <p className='text-[#cc0f35] text-xxs font-medium'>{submissionError}</p>
+                                </div>
+                                : ''
+                            }
+
+                            {/* Alert Message when camera available, card details scanned and verified */}
+                            {(hasCamera && submissionSuccess) ?
+                                <div className='flex items-center my-2 mb-4 p-2 leading-5 border-[0.5px] border-[#257953] bg-[#effaf5] rounded-lg shadow-sm'>
+                                    <i className="fa-solid fa-check mr-1 text-[#257953]"/>
+                                    <p className='text-[#257953] font-medium'>{submissionSuccess}</p>
+                                </div>
+                                : ''
+                            }
                         </div>
 
                         {/* Card Details Form */}
@@ -227,6 +245,7 @@ export function AddCard(props) {
                                     </div>
                                     <p className="text-sm text-green-600 mt-1">{scanningSuccess}</p>
                                     <p className="text-sm text-red-600 mt-1">{scanningError}</p>
+                                    <p className="text-sm text-green-600 mt-1">{submissionSuccess}</p>
                                     <p className="text-sm text-red-600 mt-1">{submissionError}</p>
                                 </div>
 
