@@ -222,7 +222,7 @@ export function AddCard(props) {
                         </div>
 
                         {/* Card Details Form */}
-                        {(!hasCamera || scanningError) ? 
+                        {/* {(!hasCamera || scanningError) ?  */}
                             <form onSubmit={formSubmitHandler}>
                                 <div className="mb-6">
                                     <label className="block mb-1 text-coolGray-600 font-medium after:content-['*'] after:ml-0.5 after:text-red-500" htmlFor="">Card Number</label>
@@ -254,8 +254,8 @@ export function AddCard(props) {
                                     Get Promos
                                 </button>
                             </form>
-                            : ''
-                        }
+                            {/* : ''
+                        } */}
                         
                         {(scanning) ? <ScanCard setScannedURL={setScannedURL} setScanningError={setScanningError}/> : ""}
                     </div>
