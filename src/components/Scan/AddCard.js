@@ -4,8 +4,11 @@ import { useEffect, useState, useRef } from 'react';
 
 // Redux Imports
 import { useSelector, useDispatch } from 'react-redux';
+import { appStore, updateActiveNav } from '../../app/appSlice';
 import { authStore } from '../../app/authSlice';
-import { appStore, saveCardDetails, verifyCardDetails, assignNewCardDetails } from '../../app/appSlice';
+import { clientStore, getClientFromDB } from '../../app/clientSlice';
+import { businessStore, getBusinessFromDB } from '../../app/businessSlice';
+import { cardStore, saveCardDetails, verifyCardDetails } from '../../app/cardSlice';
 
 // Modules Imports
 import { NavLink, useNavigate } from "react-router-dom";
@@ -22,6 +25,9 @@ import './AddCard.css';
 export function AddCard(props) {
     const app = useSelector(appStore);
     const auth = useSelector(authStore);
+    const client = useSelector(clientStore);
+    const business = useSelector(businessStore);
+    const card = useSelector(cardStore);
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
@@ -63,6 +69,12 @@ export function AddCard(props) {
         console.log("COMPONENT RENDERED: AddCard");
         checkDeviceCamera();
     }, [])
+
+    useEffect(() => {
+        dispatch(updateActiveNav(ROUTES.SCAN));
+        dispatch(getClientFromDB({client_name: window.location.hostname.split('-')[1]})); // hostname formatter as admin-CLIENT_NAME e.g. admin-glowbal in admin-glowbal.myloyaltycard.com/
+        dispatch(getBusinessFromDB({client_name: window.location.hostname.split('-')[1]})); // hostname formatter as admin-CLIENT_NAME e.g. admin-glowbal in admin-glowbal.myloyaltycard.com/
+    }, [dispatch])
 
     useEffect(() => {
         if(scannedURL.length > 0) {
@@ -229,25 +241,39 @@ export function AddCard(props) {
                         {/* Card Details Form */}
                         {/* {(!hasCamera || scanningError) ?  */}
                             <form onSubmit={formSubmitHandler}>
-                                <div className="mb-6">
-                                    <label className="block mb-1 text-coolGray-600 font-medium after:content-['*'] after:ml-0.5 after:text-red-500" htmlFor="">Card Number</label>
-                                    {/* <label className="block mb-2 text-coolGray-500 text-xxs" htmlFor="">Located back of Loyalty Card</label> */}
-                                    <div className='flex justify-between items-center relative'>
-                                        <input ref={cardNumRef} className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-sm placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-loyaltyGold-100 focus:ring-opacity-50 transition-all" name="cardID" type="text" placeholder="Enter the Loyalty Card Number" required/>
-                                        {scanningSuccess ? <span className='absolute right-4'><i className="fa-solid fa-check" style={{color: '#48C774'}}></i></span> : ""}
-                                        {scanningError ? <span className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></span> : ""}
-                                        {submissionError ? <span className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></span> : ""}
+                                <div className='flex mb-3 justify-between items-center'>
+                                <label className="block mb-1 mr-2 text-coolGray-600 font-medium after:content-['*'] after:ml-0.5 after:text-red-500" htmlFor="">Promos For:</label>
+                                    <select className='py-1 px-2 w-[70%] text-center text-coolGray-900 border border-coolGray-200 rounded-lg shadow-sm placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-loyaltyGold-100 focus:ring-opacity-50 transition-all'>
+                                        <option className='text-center text-coolGray-900'>All</option>
+                                        <option className='text-center text-coolGray-900'>2</option>
+                                        <option className='text-center text-coolGray-900'>3</option>
+                                        <option className='text-center text-coolGray-900'>4</option>
+                                    </select>
+                                </div>
+                                <div className='flex flex-row justify-between'>
+                                    <div className="mb-6 mr-3 w-full">
+                                        <label className="block mb-1 text-coolGray-600 font-medium after:content-['*'] after:ml-0.5 after:text-red-500" htmlFor="">Card Number</label>
+                                        {/* <label className="block mb-2 text-coolGray-500 text-xxs" htmlFor="">Located back of Loyalty Card</label> */}
+                                        <div className='flex justify-between items-center relative'>
+                                            <input ref={cardNumRef} className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-sm placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-loyaltyGold-100 focus:ring-opacity-50 transition-all" name="cardID" type="text" placeholder="7 Character Code" required/>
+                                            {scanningSuccess ? <span className='absolute right-4'><i className="fa-solid fa-check" style={{color: '#48C774'}}></i></span> : ""}
+                                            {scanningError ? <span className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></span> : ""}
+                                            {submissionError ? <span className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></span> : ""}
+                                        </div>
+                                    </div>
+                                    <div className="mb-6  w-full">
+                                        <label className="block mb-1 text-coolGray-600 font-medium after:content-['*'] after:ml-0.5 after:text-red-500" htmlFor="">CVC</label>
+                                        {/* <label className="block mb-2 text-coolGray-500 text-xxs" htmlFor="">Located back of Loyalty Card</label> */}
+                                        <div className='flex justify-between items-center relative'>
+                                            <input ref={cardCVCRef} className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-sm placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-loyaltyGold-100 focus:ring-opacity-50 transition-all" name="cvcCode" type="text" placeholder="3 Digit Code" required/>
+                                            {scanningSuccess ? <span className='absolute right-4'><i className="fa-solid fa-check" style={{color: '#48C774'}}></i></span> : ""}
+                                            {scanningError ? <exclamation className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></exclamation> : ""}
+                                            {submissionError ? <exclamation className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></exclamation> : ""}
+                                        </div>
+                                        {/* Errors */}
                                     </div>
                                 </div>
-                                <div className="mb-6">
-                                    <label className="block mb-1 text-coolGray-600 font-medium after:content-['*'] after:ml-0.5 after:text-red-500" htmlFor="">CVC</label>
-                                    {/* <label className="block mb-2 text-coolGray-500 text-xxs" htmlFor="">Located back of Loyalty Card</label> */}
-                                    <div className='flex justify-between items-center relative'>
-                                        <input ref={cardCVCRef} className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-sm placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-loyaltyGold-100 focus:ring-opacity-50 transition-all" name="cvcCode" type="text" placeholder="Enter the Loyalty Card CVC" required/>
-                                        {scanningSuccess ? <span className='absolute right-4'><i className="fa-solid fa-check" style={{color: '#48C774'}}></i></span> : ""}
-                                        {scanningError ? <exclamation className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></exclamation> : ""}
-                                        {submissionError ? <exclamation className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></exclamation> : ""}
-                                    </div>
+                                <div>
                                     <p className="text-sm text-green-600 mt-1">{scanningSuccess}</p>
                                     <p className="text-sm text-red-600 mt-1">{scanningError}</p>
                                     <p className="text-sm text-green-600 mt-1">{submissionSuccess}</p>
