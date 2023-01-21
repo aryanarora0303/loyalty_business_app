@@ -17,20 +17,23 @@ export const getBusinessFromDB = createAsyncThunk(
 'getBusinessFromDB',
 async (param) => {
     console.log("businessSlice: getBusinessFromDB");
-    try{
-    let id = param.customer.id;
-    let authHeaders = {
-      'Authorization': param.session.jwtToken
-    }
-    const res = await axios.get(`${process.env.REACT_APP_AWS_API_GATEWAY}/get-customer-card-info?customer_id=${id}`, {headers: authHeaders});
-    let card = res.data.data.card;
-    card['invite_link'] = `${window.location.host}/sign-up?invite_code=${card.invite_code}`;
-    card['client_image'] = './client-logos/' + card.client_name.replaceAll(' ', '_') + '.png';
-    card['card_corner_image'] = './card-types/' + card.card_type + '_card_corner.png';
-    return {message: "Card extracted from db", type: "success", data: res.data.data.card};
+    try {
+        let name = param.client_name;
+        // ----------------------
+        // TODO: REMOVE THIS LINE
+        name = 'glowbal'
+        // TODO: REMOVE THIS LINE
+        // ----------------------
+
+        const res = await axios.get(`${process.env.REACT_APP_AWS_API_GATEWAY}/get-business-info?authorizer=${process.env.REACT_APP_AWS_API_KEY}&client_name=${name}`);
+        let business = res.data.data.business;
+        business.forEach((businessInfo, index) => {
+            businessInfo['bus_image'] = './business-logos/' + businessInfo.bus_name.toUpperCase().replaceAll(' ', '_').replaceAll('+', 'PLUS') + '.png';
+        })
+        return {message: "Business extracted from db", type: "success", data: business};
     }
     catch(err){
-    return {message: err.message, type: "error", data: null};
+        return {message: err.message, type: "error", data: null};
     }
 }
 );
@@ -44,15 +47,30 @@ export const businessSlice = createSlice({
         builder.addCase(getBusinessFromDB.pending, (state, action) => {
           console.log("businessSlice: getBusinessFromDB Requested");
           console.log('\t Request Pending', action);
+          state.isBusinessExtractingFromDB = true;
         });
         builder.addCase(getBusinessFromDB.fulfilled, (state, action) => {
           console.log('\t Request Fulfilled', action);
           if(action.payload.type === 'error'){  
+            state.isBusinessExtractingFromDB = false;       
+            state.hasBusinessExtractedFromDB = false;       
+            state.hasBusinessExtractingFromDBError = true; 
+            state.extractingBusinessFromDBError = action.payload.message;
           } else {
+            state.business = action.payload.data;
+
+            state.isBusinessExtractingFromDB = false;       
+            state.hasBusinessExtractedFromDB = true;       
+            state.hasBusinessExtractingFromDBError = false; 
+            state.extractingBusinessFromDBError = null;
           }
         });
         builder.addCase(getBusinessFromDB.rejected, (state, action) => {
-          console.log('\t Request Rejected', action);
+            console.log('\t Request Rejected', action);
+            state.isBusinessExtractingFromDB = false;       
+            state.hasBusinessExtractedFromDB = false;       
+            state.hasBusinessExtractingFromDBError = true; 
+            state.extractingBusinessFromDBError = action.payload.message;
         });
     }
   });

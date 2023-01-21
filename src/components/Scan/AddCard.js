@@ -9,6 +9,7 @@ import { authStore } from '../../app/authSlice';
 import { clientStore, getClientFromDB } from '../../app/clientSlice';
 import { businessStore, getBusinessFromDB } from '../../app/businessSlice';
 import { cardStore, saveCardDetails, verifyCardDetails } from '../../app/cardSlice';
+import { promoStore, getPromoOnScanFromDB } from '../../app/promoSlice';
 
 // Modules Imports
 import { NavLink, useNavigate } from "react-router-dom";
@@ -28,10 +29,15 @@ export function AddCard(props) {
     const client = useSelector(clientStore);
     const business = useSelector(businessStore);
     const card = useSelector(cardStore);
+    const promo = useSelector(promoStore);
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [alertMessage, setAlertMessage] = useState({type: '', message: ''}); // TYPE: Success or Error
+
+    const businessIdRef = useRef();                              // Reference to store business id for which promos will be extracted
     const cardNumRef = useRef();                                 // Reference to store card id
     const cardCVCRef = useRef();                                 // Reference to store card cvc/security code
 
@@ -130,48 +136,68 @@ export function AddCard(props) {
     }, [scanningError])
 
     useEffect(() => {
-        if(app.hasCardDetailsSaved){
-            console.log("COMPONENT AddCard: Verify Card Details");
-            dispatch(verifyCardDetails(app.card));
+        if(card.hasCardDetailsSaved){
+            console.log("COMPONENT AddCard: Card Details Saved");
+            dispatch(verifyCardDetails(card.card));
         }
 
-        if(app.hasCardDetailsSavingError){
+        if(card.hasCardDetailsSavingError){
             console.log("COMPONENT AddCard: Card Details Saving Error");
             setSubmissionSuccess("");
-            let error = app.cardDetailsSavingError.split(' ').map(elem => elem[0].toUpperCase()+ elem.slice(1)).join(' '); // Capitalize first letter of each word
+            let error = card.cardDetailsSavingError.split(' ').map(elem => elem[0].toUpperCase()+ elem.slice(1)).join(' '); // Capitalize first letter of each word
             setSubmissionError(`${error}. Check Card Details & Try Again.`);
         }
-    }, [app.isCardDetailsSaving, app.hasCardDetailsSaved, app.hasCardDetailsSavingError, app.cardDetailsSavingError, app.card])
+    }, [card.isCardDetailsSaving, card.hasCardDetailsSaved, card.hasCardDetailsSavingError, card.cardDetailsSavingError, card.card])
 
     useEffect(() => {
-        if(app.hasCardDetailsVerified){
+        if(card.hasCardDetailsVerified){
             console.log("COMPONENT AddCard: Card Details Verified");
-            setSubmissionSuccess("Verified");
+            setSubmissionSuccess("Card Details Verified");
+            setSubmissionError("");
+            let data = {
+                card: {
+                    id: card.card.id,
+                },
+                business: {
+                    id: businessIdRef.current.value,
+                }
+            }
+            dispatch(getPromoOnScanFromDB(data));
         }
 
-        if(app.hasCardDetailsVerifyingError){
+        if(card.hasCardDetailsVerifyingError){
             console.log("COMPONENT AddCard: Card Details Verifying Error");
             setSubmissionSuccess("");
-            let error = app.verifyCardDetailsError.split(' ').map(elem => elem[0].toUpperCase()+ elem.slice(1)).join(' '); // Capitalize first letter of each word 
+            let error = card.verifyCardDetailsError.split(' ').map(elem => elem[0].toUpperCase()+ elem.slice(1)).join(' '); // Capitalize first letter of each word 
             setSubmissionError(`${error}. Check Card Details & Try Again.`);
         }
-    }, [app.isCardDetailsVerifying, app.hasCardDetailsVerified, app.hasCardDetailsVerifyingError, app.verifyCardDetailsError])
+    }, [card.isCardDetailsVerifying, card.hasCardDetailsVerified, card.hasCardDetailsVerifyingError, card.verifyCardDetailsError])
+
+    useEffect(() => {
+        if(promo.hasExtractedPromoOnScanFromDB){
+            console.log("COMPONENT AddCard: Promo Info On Scan Extracted");
+        }
+
+        if(promo.hasExtractingPromoOnScanFromDBError){
+            console.log("COMPONENT AddCard: Promo Info On Scan Extracting Error");
+            setSubmissionSuccess("");
+            let error = promo.extractingPromoOnScanFromDBError.split(' ').map(elem => elem[0].toUpperCase()+ elem.slice(1)).join(' '); // Capitalize first letter of each word 
+            setSubmissionError(`${error}. Check Card Details & Try Again.`);
+        }
+
+    }, [promo.isExtractingPromoOnScanFromDB, promo.hasExtractedPromoOnScanFromDB, promo.hasExtractingPromoOnScanFromDBError, promo.extractingPromoOnScanFromDBError, promo.promoScan])
 
     let formSubmitHandler = (event) => {
+        console.log("COMPONENT AddCard: Get Promos Button Clicked");
         event.preventDefault();
 
-        if(scanningSuccess === 'Verified'){
-            console.log(`COMPONENT AddCard: Next Card Form Submission`);
-            props.setAddCardComplete(true);
-        }
-        else {
-            let cardNumber = cardNumRef.current.value;
-            let cardCVC = cardCVCRef.current.value;
-            
-            console.log(`COMPONENT AddCard: Verify Card Form Submission. Card ID: ${cardNumber}, CVC Code: ${cardCVC}`);
-    
-            dispatch(saveCardDetails({'id': cardNumber, 'cvc': cardCVC}));
-        }
+        let businessId = businessIdRef.current.value;
+        let cardNumber = cardNumRef.current.value;
+        let cardCVC = cardCVCRef.current.value;
+        
+        console.log(`COMPONENT AddCard: Save Card Details. Card ID: ${cardNumber}, CVC Code: ${cardCVC}, BUSINESS ID: ${businessId}`);
+
+        dispatch(saveCardDetails({'id': cardNumber, 'cvc': cardCVC}));
     }
 
     let scanCardHandler = (event) => {
@@ -183,13 +209,17 @@ export function AddCard(props) {
     return (
         <section className="bg-white bg-opacity-0 min-h-[70vh]">
             <div className="container px-4 mx-auto">
-                <div className="max-w-lg mx-auto">
+                <div className="max-w-xl mx-auto">
 
                     {/* Page Tag Line -> */}
                     <div className="mb-7 text-center">
                         <NavLink className="hidden mb-3 sm:inline-block" 
                             to={(auth.isAuthenticated) ? ROUTES.DASHBOARD : ROUTES.SCAN}>
-                            <img className="h-24" src="./loyalty_logo.png" alt=""/>
+                            {(client.client) ? 
+                                <img className="h-24" src={client.client.client_image} alt="Client Logo"/>
+                                :
+                                <img className="h-24" src="./loyalty_logo.png" alt=""/>
+                            }
                         </NavLink>
                         <h3 className="mb-2 text-2xl text-coolGray-900 md:text-3xl font-bold">Scan Customer Promos</h3>
                         <p className="text-lg text-coolGray-500 font-medium">Welcome back!</p>
@@ -213,26 +243,28 @@ export function AddCard(props) {
                             {/* Alert Message when camera NOT available */}
                             {(!hasCamera) ?
                                 <div className='flex items-center my-1 mb-4 px-2 py-1 leading-5 border-[0.5px] border-[#cc0f35] bg-[#feecf0] rounded-lg shadow-sm'>
+                                    <i className="fa-solid fa-exclamation mr-1 text-xxs text-[#cc0f35]"/>
                                     <p className='text-[#cc0f35] text-xxs font-medium'>
-                                        ALERT: Device Camera NOT Available, Enter Card Details Manually Below(or Refresh Page if you think its an error).
+                                        ALERT: Device Camera NOT Available, Enter Card Details Manually Below(or Refresh Page).
                                     </p>
                                 </div>
                                 : ''
                             }
 
-                            {/* Alert Message when camera available, submissio error */}
-                            {(hasCamera && submissionError) ?
+                            {/* Alert Message when camera available, submission error */}
+                            {(submissionError) ?
                                 <div className='flex items-center my-1 mb-4 px-2 py-1 leading-5 border-[0.5px] border-[#cc0f35] bg-[#feecf0] rounded-lg shadow-sm'>
+                                    <i className="fa-solid fa-exclamation mr-1 text-xxs text-[#cc0f35]"/>
                                     <p className='text-[#cc0f35] text-xxs font-medium'>{submissionError}</p>
                                 </div>
                                 : ''
                             }
 
                             {/* Alert Message when camera available, card details scanned and verified */}
-                            {(hasCamera && submissionSuccess) ?
-                                <div className='flex items-center my-2 mb-4 p-2 leading-5 border-[0.5px] border-[#257953] bg-[#effaf5] rounded-lg shadow-sm'>
-                                    <i className="fa-solid fa-check mr-1 text-[#257953]"/>
-                                    <p className='text-[#257953] font-medium'>{submissionSuccess}</p>
+                            {(submissionSuccess) ?
+                                <div className='flex items-center my-1 mb-4 px-2 py-1 leading-5 border-[0.5px] border-[#257953] bg-[#effaf5] rounded-lg shadow-sm'>
+                                    <i className="fa-solid fa-check mr-1 text-xxs text-[#257953]"/>
+                                    <p className='text-[#257953] text-xxs font-medium'>{submissionSuccess}</p>
                                 </div>
                                 : ''
                             }
@@ -243,31 +275,36 @@ export function AddCard(props) {
                             <form onSubmit={formSubmitHandler}>
                                 <div className='flex mb-3 justify-between items-center'>
                                 <label className="block mb-1 mr-2 text-coolGray-600 font-medium after:content-['*'] after:ml-0.5 after:text-red-500" htmlFor="">Promos For:</label>
-                                    <select className='py-1 px-2 w-[70%] text-center text-coolGray-900 border border-coolGray-200 rounded-lg shadow-sm placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-loyaltyGold-100 focus:ring-opacity-50 transition-all'>
-                                        <option className='text-center text-coolGray-900'>All</option>
-                                        <option className='text-center text-coolGray-900'>2</option>
-                                        <option className='text-center text-coolGray-900'>3</option>
-                                        <option className='text-center text-coolGray-900'>4</option>
+                                    <select ref={businessIdRef} className='py-1 px-2 w-[70%] text-center text-coolGray-900 border border-coolGray-200 rounded-lg shadow-sm placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-loyaltyGold-100 focus:ring-opacity-50 bg-center transition-all'>
+                                        <option className='text-center text-coolGray-900' value={0}>All</option>
+                                        {(business.business) ? 
+                                            business.business.map((business, index) =>{
+                                                return <option className='text-center text-coolGray-900' key={index} value={business.bus_id}>{business.bus_name}</option>
+                                            })
+                                            : ""
+                                        }
                                     </select>
                                 </div>
                                 <div className='flex flex-row justify-between'>
-                                    <div className="mb-6 mr-3 w-full">
+                                    <div className="mb-3 mr-3 w-full">
                                         <label className="block mb-1 text-coolGray-600 font-medium after:content-['*'] after:ml-0.5 after:text-red-500" htmlFor="">Card Number</label>
                                         {/* <label className="block mb-2 text-coolGray-500 text-xxs" htmlFor="">Located back of Loyalty Card</label> */}
                                         <div className='flex justify-between items-center relative'>
                                             <input ref={cardNumRef} className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-sm placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-loyaltyGold-100 focus:ring-opacity-50 transition-all" name="cardID" type="text" placeholder="7 Character Code" required/>
                                             {scanningSuccess ? <span className='absolute right-4'><i className="fa-solid fa-check" style={{color: '#48C774'}}></i></span> : ""}
                                             {scanningError ? <span className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></span> : ""}
+                                            {submissionSuccess ? <span className='absolute right-4'><i className="fa-solid fa-check" style={{color: '#48C774'}}></i></span> : ""}
                                             {submissionError ? <span className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></span> : ""}
                                         </div>
                                     </div>
-                                    <div className="mb-6  w-full">
+                                    <div className="mb-3  w-full">
                                         <label className="block mb-1 text-coolGray-600 font-medium after:content-['*'] after:ml-0.5 after:text-red-500" htmlFor="">CVC</label>
                                         {/* <label className="block mb-2 text-coolGray-500 text-xxs" htmlFor="">Located back of Loyalty Card</label> */}
                                         <div className='flex justify-between items-center relative'>
                                             <input ref={cardCVCRef} className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-sm placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-loyaltyGold-100 focus:ring-opacity-50 transition-all" name="cvcCode" type="text" placeholder="3 Digit Code" required/>
                                             {scanningSuccess ? <span className='absolute right-4'><i className="fa-solid fa-check" style={{color: '#48C774'}}></i></span> : ""}
                                             {scanningError ? <exclamation className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></exclamation> : ""}
+                                            {submissionSuccess ? <span className='absolute right-4'><i className="fa-solid fa-check" style={{color: '#48C774'}}></i></span> : ""}
                                             {submissionError ? <exclamation className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></exclamation> : ""}
                                         </div>
                                         {/* Errors */}
