@@ -58,8 +58,10 @@ export const verifyCardDetails = createAsyncThunk(
     console.log("cardSlice: verifyCardDetails");
     try {
       const res = await axios.get(`${process.env.REACT_APP_AWS_API_GATEWAY}/verify-card?authorizer=${process.env.REACT_APP_AWS_API_GATEWAY}&card_id=${param.id}&card_cvc=${param.cvc}`);
+
+      console.log("CARD DETAILS VERIFYING RESPONSE", res.data.type);
       
-      if(res.data.type === "success"){ return {message: "card valid", type: "success", data: null}; }
+      if(res.data.type === "success"){ return {message: "card valid", type: "success", data: res.data.data.card}; }
       if(res.data.type === "error"){ return {message: "card not valid", type: "error", data: null}; }
     }
     catch(err) {
@@ -107,6 +109,9 @@ export const cardSlice = createSlice({
       console.log("cardSlice: getCardFromDB Requested");
       console.log('\t Request Pending', action);
       state.isCardExtractingFromDB = true;
+      state.hasCardExtractedFromDB = false;       
+      state.hasCardExtractingFromDBError = false; 
+      state.extractingCardFromDBError = null;
     });
     builder.addCase(getCardFromDB.fulfilled, (state, action) => {
       console.log('\t Request Fulfilled', action);
@@ -137,6 +142,9 @@ export const cardSlice = createSlice({
       console.log("appSlice: verifyCardDetails Requested");
       console.log('\t Request Pending', action);
       state.isCardDetailsVerifying = true;
+      state.hasCardDetailsVerified = false;
+      state.hasCardDetailsVerifyingError = false;
+      state.verifyCardDetailsError = null;
     });
     builder.addCase(verifyCardDetails.fulfilled, (state, action) => {
       console.log('\t Request Fulfilled', action);
@@ -165,6 +173,9 @@ export const cardSlice = createSlice({
       console.log("appSlice: assignNewCard Requested");
       console.log('\t Request Pending', action);
       state.isCardDetailsAssigning = true;
+      state.hasNewCardDetailsAssigned = false;
+      state.hasNewCardDetailsAssigningError = false;
+      state.newCardDetailsAssigningError = null;
     });
     builder.addCase(assignNewCardDetails.fulfilled, (state, action) => {
       console.log('\t Request Fulfilled', action);

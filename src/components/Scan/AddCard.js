@@ -13,6 +13,7 @@ import { promoStore, getPromoOnScanFromDB } from '../../app/promoSlice';
 
 // Modules Imports
 import { NavLink, useNavigate } from "react-router-dom";
+import CopyToClipboard from 'copy-to-clipboard';
 
 // Components Imports
 import { ScanCard } from './ScanCard';
@@ -54,7 +55,11 @@ export function AddCard(props) {
     const [submissionError, setSubmissionError] = useState(''); // Store form submission(card saving & verification) error
     const [submissionSuccess, setSubmissionSuccess] = useState(''); // Store form submission success
 
-    const [customerPromos, setCustomerPromos] = useState('');
+    const [promoOption, setPromoOption] = useState('');
+    const [onlyForYouOptionClassName, setOnlyForYouOptionClassName] = useState('');
+    const [allOptionClassName, setAllOptionClassName] = useState('');
+
+    const [customerPromos, setCustomerPromos] = useState(null);
 
     let checkDeviceCamera = () => {
         // Check if device hasCamera, Only if yes, Scan Card button is visible
@@ -157,6 +162,7 @@ export function AddCard(props) {
             let data = {
                 card: {
                     id: card.card.id,
+                    cvc: card.card.cvc,
                 },
                 business: {
                     id: businessIdRef.current.value,
@@ -176,6 +182,7 @@ export function AddCard(props) {
     useEffect(() => {
         if(promo.hasExtractedPromoOnScanFromDB){
             console.log("COMPONENT AddCard: Promo Info On Scan Extracted");
+            setPromoOption('ALL');
         }
 
         if(promo.hasExtractingPromoOnScanFromDBError){
@@ -185,7 +192,33 @@ export function AddCard(props) {
             setSubmissionError(`${error}. Check Card Details & Try Again.`);
         }
 
-    }, [promo.isExtractingPromoOnScanFromDB, promo.hasExtractedPromoOnScanFromDB, promo.hasExtractingPromoOnScanFromDBError, promo.extractingPromoOnScanFromDBError, promo.promoScan])
+    }, [promo.isExtractingPromoOnScanFromDB, promo.hasExtractedPromoOnScanFromDB, promo.hasExtractingPromoOnScanFromDBError, promo.extractingPromoOnScanFromDBError, promo.promoOnScan])
+
+    useEffect(() => {
+        let active_option = '!text-loyaltyGold-200 !border-b-2 !border-loyaltyGold-200';
+        let inactive_option = '!border-b-2 !border-transparent';
+        switch (promoOption) {
+            case 'ONLY_FOR_YOU':
+                console.log("COMPONENT AddCard: ONLY_FOR_YOU Option Selected");
+                setOnlyForYouOptionClassName(active_option);
+                setAllOptionClassName(inactive_option);
+                break;
+            case 'ALL':
+                console.log("COMPONENT AddCard: ALL Option Selected");
+                setOnlyForYouOptionClassName(inactive_option);
+                setAllOptionClassName(active_option);
+                break;
+            default:
+                console.log("COMPONENT AddCard: No option selected");
+                setOnlyForYouOptionClassName(inactive_option);
+                setAllOptionClassName(inactive_option);
+                break;
+        }
+        if(promoOption && promo.hasExtractedPromoOnScanFromDB){
+            console.log("COMPONENT AddCard: PromoOption set, Promos data from db available, Set Promos");
+            setAndAddPromos(promoOption);
+        }
+    }, [promoOption, promo.hasExtractedPromoOnScanFromDB]);
 
     let formSubmitHandler = (event) => {
         console.log("COMPONENT AddCard: Get Promos Button Clicked");
@@ -197,6 +230,12 @@ export function AddCard(props) {
         
         console.log(`COMPONENT AddCard: Save Card Details. Card ID: ${cardNumber}, CVC Code: ${cardCVC}, BUSINESS ID: ${businessId}`);
 
+        if(customerPromos) {
+            console.log("COMPONENT AddCard: Reset customerPromos & promoOption");
+            setCustomerPromos(null);
+            setPromoOption('');
+        }
+
         dispatch(saveCardDetails({'id': cardNumber, 'cvc': cardCVC}));
     }
 
@@ -205,6 +244,48 @@ export function AddCard(props) {
         console.log("COMPONENT AddCard: Scan Card Button Clicked");
         setScanning(true);
     }
+
+    let handleCopy = (promo_btn_id, promo_code) => {
+        CopyToClipboard(promo_code);
+        let btn = document.getElementById(promo_btn_id)
+        btn.innerHTML = `<i className="fa-regular fa-copy mr-2"></i> Copied`;
+        btn.style.setProperty('color','#C9A36B'); 
+        btn.style.setProperty('border-color', '#C9A36B');
+    }
+
+    let setAndAddPromos = (option) => {
+        let promo_list
+        if(option === 'ALL'){ promo_list = promo.promoOnScan.all_promo }
+        if(option === "ONLY_FOR_YOU"){ promo_list = promo.promoOnScan.custom_promo }
+
+        promo_list = promo_list.map((promo, index) => {
+            return (
+                <div key={index} className="flex justify-between items-center w-full mb-5 mr-0 md:mr-5 p-5 border-[1px] bg-white border-coolGray-100 rounded-md shadow-md hover:shadow-lg cursor-pointer transition-all">
+                    
+                    <div className='flex'>
+                        <img className="mr-5 p-1 h-16 border-2 border-double border-loyaltyGold-100 shadow-md rounded-full" src={promo.bus_image} alt='Business Logo'/>
+                        <div className='flex flex-col justify-around items-start'>
+                            <p className='mb-1 text-md text-center font-semibold text-coolGray-600'>{`${promo.promo_name}`}</p>
+                            <p className='mb-1 text-sm text-loyaltyGold-100 font-semibold'>{promo.bus_name}</p> 
+                            <div className='p-1 px-2 bg-loyaltyGoldFaded-100 rounded-md'>
+                                {(promo.date_validity_simplified) ? 
+                                    <p className='text-xxs font-bold text-loyaltyGold-200'>{promo.date_validity_simplified}</p>
+                                    :
+                                    <p className='text-xxs font-bold text-loyaltyGold-200'>{`${promo.date_valid_from_simplified} - ${promo.date_valid_to_simplified}`}</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id={`copy-promo-code-${index}`} className={`px-3 py-1 ml-5 flex-end h-fit border-l-[1.5px] min-w-[103px] hover:text-loyaltyGold-100 hover:border-loyaltyGold-100 font-medium transition-all text-coolGray-500 border-coolGray-300`} onClick={() => handleCopy(`copy-promo-code-${index}`, promo.promo_name)}>
+                        <i className={`fa-regular fa-copy mr-2`}></i>
+                        Copy
+                    </button>
+                </div>
+            )
+        })
+        setCustomerPromos(promo_list);
+    };
 
     return (
         <section className="bg-white bg-opacity-0 min-h-[70vh]">
@@ -303,9 +384,9 @@ export function AddCard(props) {
                                         <div className='flex justify-between items-center relative'>
                                             <input ref={cardCVCRef} className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-sm placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-loyaltyGold-100 focus:ring-opacity-50 transition-all" name="cvcCode" type="text" placeholder="3 Digit Code" required/>
                                             {scanningSuccess ? <span className='absolute right-4'><i className="fa-solid fa-check" style={{color: '#48C774'}}></i></span> : ""}
-                                            {scanningError ? <exclamation className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></exclamation> : ""}
+                                            {scanningError ? <span className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></span> : ""}
                                             {submissionSuccess ? <span className='absolute right-4'><i className="fa-solid fa-check" style={{color: '#48C774'}}></i></span> : ""}
-                                            {submissionError ? <exclamation className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></exclamation> : ""}
+                                            {submissionError ? <span className='absolute right-4'><i className="fa-solid fa-exclamation" style={{color: '#F14668'}}></i></span> : ""}
                                         </div>
                                         {/* Errors */}
                                     </div>
@@ -329,11 +410,32 @@ export function AddCard(props) {
                     </div>
                     {/* <- Scanning Card */}
                     
-                    {/* Customer Promos -> */}
-                    <div className='mb-7'>
-                        {customerPromos}
-                    </div>
-                    {/* <- Customer Promos */}
+                    {/* Customer Promos Options -> */}
+                    {(customerPromos) ? 
+                        <div className='mb-5'>
+                            <ul className="flex flex-nowrap overflow-x-auto whitespace-nowrap border-b border-coolGray-200">
+                                <li><button className={`block px-4 pb-4 text-sm font-medium text-coolGray-600 hover:text-loyaltyGold-100 hover:border-loyaltyGold-100 transition-all ${allOptionClassName}`} onClick={() => {setPromoOption('ALL')}}>All</button></li>
+                                {(promo.hasExtractedPromoOnScanFromDB && promo.promoOnScan.custom_promo.length > 0) ?
+                                    <li><button className={`block px-4 pb-4 text-sm font-medium text-coolGray-600 hover:text-loyaltyGold-100 hover:border-loyaltyGold-100 transition-all ${onlyForYouOptionClassName}`} onClick={() => {setPromoOption('ONLY_FOR_YOU')}}>Customer Specials</button></li>
+                                    : ""
+                                }
+                                {/* TODO: AFTER MVP */}
+                                {/* <li><button className={`block px-4 pb-4 text-sm font-medium text-coolGray-600 hover:text-loyaltyGold-100 hover:border-loyaltyGold-100 transition-all ${todaysTopOptionClassName}`} onClick={() => {setPromoOption('TODAYS_TOP')}}>Today's Top</button></li> */}
+                                {/* <li><button className={`block px-4 pb-4 text-sm font-medium text-coolGray-600 hover:text-loyaltyGold-100 hover:border-loyaltyGold-100 transition-all ${bestDealOptionClassName}`} onClick={() => {setPromoOption('BEST_DEAL')}}>Best Deal</button></li> */}
+                            </ul>
+                        </div>
+                        : ""
+                    }
+                    {/* <- Customer Promos Options */}
+
+                    {(customerPromos) ? 
+                        <div className='mb-5'>
+                            <div className='my-6 mt-8 flex flex-wrap justify-center md:justify-start'>
+                                {customerPromos}
+                            </div>
+                        </div>
+                        : ""
+                    }
                 </div>
             </div>
         </section>

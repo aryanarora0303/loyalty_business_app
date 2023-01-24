@@ -30,9 +30,12 @@ export const getPromoFromDB = createAsyncThunk(
         'Authorization': param.session.jwtToken
       }
       const res = await axios.get(`${process.env.REACT_APP_AWS_API_GATEWAY}/get-customer-promo-info?authorizer=${process.env.REACT_APP_AWS_API_KEY}&card_id=${id}`, {headers: authHeaders});
-      let promos = modifyPromos(res.data.data.promo);
       
-      return {message: "customer promo extracted from db", type: "success", data: promos};
+      if(res.data.type === "success"){ 
+        let promos = modifyPromos(res.data.data.promo);
+        return {message: "customer promo on scan extracted from db", type: "success", data: promos}; 
+      }
+      if(res.data.type === "error"){ return {message: "customer promo on scan not extracted from db", type: "error", data: null}; }
     }
     catch (err){
       return {message: err.message, type: "error", data: null};
@@ -46,11 +49,15 @@ export const getPromoOnScanFromDB = createAsyncThunk(
     console.log("promoSlice: getPromoOnScanFromDB");
     try {
       let card_id = param.card.id;
+      let card_cvc = param.card.cvc;
       let bus_id = param.business.id;
-      const res = await axios.get(`${process.env.REACT_APP_AWS_API_GATEWAY}/get-customer-promo-info-on-scan?authorizer=${process.env.REACT_APP_AWS_API_KEY}&card_id=${card_id}&bus_id=${bus_id}`);
-      let promos = modifyPromos(res.data.data.promo);
-      
-      return {message: "customer promo on scan extracted from db", type: "success", data: promos};
+      const res = await axios.get(`${process.env.REACT_APP_AWS_API_GATEWAY}/get-customer-promo-info-on-scan?authorizer=${process.env.REACT_APP_AWS_API_KEY}&card_id=${card_id}&card_cvc=${card_cvc}&bus_id=${bus_id}`);
+
+      if(res.data.type === "success"){ 
+        let promos = modifyPromos(res.data.data.promo);
+        return {message: "customer promo on scan extracted from db", type: "success", data: promos}; 
+      }
+      if(res.data.type === "error"){ return {message: "customer promo on scan not extracted from db", type: "error", data: null}; }
     }
     catch (err){
       return {message: err.message, type: "error", data: null};
@@ -103,6 +110,7 @@ export const promoSlice = createSlice({
       builder.addCase(getPromoOnScanFromDB.fulfilled, (state, action) => {
         console.log('\t Request Fulfilled', action);
         if(action.payload.type === 'error'){ 
+          state.promoOnScan = {};
           state.isExtractingPromoOnScanFromDB = false;       
           state.hasExtractedPromoOnScanFromDB = false;       
           state.hasExtractingPromoOnScanFromDBError = true; 
@@ -118,6 +126,7 @@ export const promoSlice = createSlice({
       });
       builder.addCase(getPromoOnScanFromDB.rejected, (state, action) => {
         console.log('\t Request Rejected', action);
+        state.promoOnScan = {};
         state.isExtractingPromoOnScanFromDB = false;       
         state.hasExtractedPromoOnScanFromDB = false;       
         state.hasExtractingPromoOnScanFromDBError = true; 
