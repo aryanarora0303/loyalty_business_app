@@ -48,6 +48,9 @@ export const businessSlice = createSlice({
           console.log("businessSlice: getBusinessFromDB Requested");
           console.log('\t Request Pending', action);
           state.isBusinessExtractingFromDB = true;
+          state.hasBusinessExtractedFromDB = false;       
+          state.hasBusinessExtractingFromDBError = false; 
+          state.extractingBusinessFromDBError = null;
         });
         builder.addCase(getBusinessFromDB.fulfilled, (state, action) => {
           console.log('\t Request Fulfilled', action);

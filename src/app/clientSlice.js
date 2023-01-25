@@ -47,6 +47,9 @@ export const clientSlice = createSlice({
       console.log("clientSlice: getClientFromDB Requested");
       console.log('\t Request Pending', action);
       state.isClientExtractingFromDB = true;
+      state.hasClientExtractedFromDB = false;       
+      state.hasClientExtractingFromDBError = false; 
+      state.extractingClientFromDBError = null;
     });
     builder.addCase(getClientFromDB.fulfilled, (state, action) => {
       console.log('\t Request Fulfilled', action);
