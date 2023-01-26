@@ -1,6 +1,6 @@
 // React Imports
 import React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // Redux Imports
 import { useSelector } from 'react-redux';
@@ -31,6 +31,9 @@ function App() {
 
   const navigate = useNavigate();
 
+  const [showNavBar, setShowNavBar] =  useState(true);
+  const [appStyleForDashboard, setAppStyleForDashboard] = useState();
+
   useEffect(() => {
     console.log("COMPONENT RENDERED: App");
   }, [])
@@ -40,20 +43,29 @@ function App() {
       console.log("COMPONENT App: Use not authenticated, Trying to access dashboard, Routing to SignIn Page");
       navigate(ROUTES.SIGN_IN);
     }
+
+    if(app.nav.activeLink === ROUTES.DASHBOARD && auth.isAuthenticated) {
+      setShowNavBar(false);
+      setAppStyleForDashboard('w-full');
+    }
+
+    if(app.nav.activeLink !== ROUTES.DASHBOARD) {
+      setAppStyleForDashboard('w-11/12 sm:w-10/12 lg:9/12 max-w-7xl');
+    }
   }, [app.nav.activeLink, auth.isAuthenticated])
 
   useEffect(() => {
     if(auth.isAuthenticated) { 
       console.log("COMPONENT App: User Signed in, Route to Dashboard");
-      navigate(ROUTES.DASHBOARD) 
+      navigate(ROUTES.DASHBOARD);
     }
 }, [auth.isAuthenticated])
 
   return (
     <div id='wrapper' className='min-h-[70vh]' style={{ backgroundImage: "url('./pattern-white.svg')", backgroundPosition: "center", backgroundRepeat: "repeat" }}>
-      <div id='app' className='w-11/12 sm:w-10/12 lg:9/12 max-w-7xl mx-auto scroll-smooth hover:scroll-auto transition-all'>
+      <div id='app' className={`${appStyleForDashboard} mx-auto scroll-smooth hover:scroll-auto transition-all`}>
 
-        <Navbar/>
+        {(showNavBar) ? <Navbar/> : ''}
 
         <Routes>
           <Route exact path={ROUTES.HOME_PAGE} element={<HomePage/>}></Route>
@@ -62,8 +74,8 @@ function App() {
           <Route exact path={ROUTES.SIGN_IN} element={<SignIn/>}></Route>
         </Routes>
 
-        <Footer/>
-
+        {(showNavBar) ? <Footer/> : ''}
+        
       </div>
     </div>
   );
