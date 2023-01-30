@@ -46,7 +46,6 @@ export function Navbar() {
 
         // close
         const close = document.querySelectorAll('.navbar-close');
-        const backdrop = document.querySelectorAll('.navbar-backdrop');
 
         if (close.length) {
             for (var i = 0; i < close.length; i++) {
@@ -58,15 +57,11 @@ export function Navbar() {
             }
         }
 
-        if (backdrop.length) {
-            for (let i = 0; i < backdrop.length; i++) {
-                backdrop[i].addEventListener('click', function() {
-                    for (let j = 0; j < menu.length; j++) {
-                        menu[j].classList.toggle('hidden');
-                    }
-                });
+        menu[0].addEventListener('click', function(e) {
+            if (e.target.id === 'navbar-menu') {
+                menu[0].classList.toggle('hidden');
             }
-        }
+        })
     },[])
 
     useEffect(() => {
@@ -134,7 +129,7 @@ export function Navbar() {
                 </button>
             </nav>
         
-            <div className="navbar-menu hidden fixed top-0 right-0 z-50 w-full h-full bg-coolGray-900 bg-opacity-50 transition-all">
+            <div id='navbar-menu' className="navbar-menu hidden fixed top-0 right-0 z-50 w-full h-full bg-coolGray-900 bg-opacity-50 transition-all">
                 <div className="fixed top-0 right-0 bottom-0 w-5/6 max-w-xs bg-white">
                     <nav className="relative p-6 h-full overflow-y-auto">
                         <div className="flex flex-col justify-between h-full">
