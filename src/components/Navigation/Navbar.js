@@ -144,7 +144,7 @@ export function Navbar() {
                                     <img className="h-20" src="./loyalty_logo.png" alt="" />
                                 </NavLink>
                                 <button className="navbar-close">
-                                    <i class="fa-solid fa-xmark text-xl text-coolGray-500"></i>
+                                    <i className="fa-solid fa-xmark text-xl text-coolGray-500"></i>
                                 </button>
                             </div>
                             <ul className="py-6">
