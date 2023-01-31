@@ -37,11 +37,11 @@ export function BusinessesData() {
         if(business.hasAllBusinessExtractedFromDB){
             let rows = business.allBusiness.map((business, index) => {
                 return (
-                    <tr key={index} className="border-b border-gray-200">
-                        <th className="py-2 bg-white text-sm font-medium text-coolGray-600 text-center">{business.bus_id}</th>
-                        <th className="py-2 bg-white text-sm font-medium text-coolGray-600 text-center"><img className='h-14 m-auto' src={business.bus_image} alt='business logo'/></th>
-                        <th className="py-2 bg-white text-sm font-medium text-coolGray-600 text-center">{business.client_id}</th>
-                        <th className="py-2 bg-white text-sm font-medium text-coolGray-600 text-center">{business.bus_name}</th>
+                    <tr id={business.bus_id} key={index} className="border-b border-gray-200">
+                        <th className="py-2 px-3 bg-white text-sm truncate font-medium text-coolGray-600 text-center underline hover:decoration-loyaltyGold-200 cursor-pointer">{business.bus_id}</th>
+                        <th className="py-2 px-3 bg-white text-sm truncate font-medium text-coolGray-600 text-center"><img className='h-14 m-auto' src={business.bus_image} alt='business logo'/></th>
+                        {/* <th className="py-2 px-3 bg-white text-sm truncate font-medium text-coolGray-600 text-center">{business.client_id}</th> */}
+                        <th className="py-2 px-3 bg-white text-sm truncate font-medium text-coolGray-600 text-center">{business.bus_name}</th>
                     </tr>
                 )
             })
@@ -53,12 +53,12 @@ export function BusinessesData() {
         <section className="container">
             <div className="p-6 bg-white border border-coolGray-100 rounded-md shadow-md">
                 <h2 className="mb-4 text-lg text-loyaltyGold-100 font-semibold">All Businesses</h2>
-                <table className="table-auto w-full border-collapse">
+                <table className="table-fixed w-full border-collapse overflow-x-scroll">
                     <tbody>
                         <tr className="bg-coolGray-50 bg-opacity-80 rounded-md shadow-sm">
                             <th className="py-3 font-semibold text-xs text-coolGray-800 uppercase text-center rounded-l-md">ID</th>
                             <th className="py-3 font-semibold text-xs text-coolGray-800 uppercase text-center">LOGO</th>
-                            <th className="py-3 font-semibold text-xs text-coolGray-800 uppercase text-center">GROUP ID</th>
+                            {/* <th className="py-3 font-semibold text-xs text-coolGray-800 uppercase text-center">GROUP ID</th> */}
                             <th className="py-3 font-semibold text-xs text-coolGray-800 uppercase text-center rounded-r-md">NAME</th>
                         </tr>
                         {tableDataRows}

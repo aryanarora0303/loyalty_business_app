@@ -118,7 +118,7 @@ export function Sidebar(props) {
             <div className="navbar-backdrop z-40 fixed hidden inset-0 bg-coolGray-900 opacity-60" />
 
             {/* Sidebar Navigation */}
-            <div className="navbar-menu z-50 fixed top-0 left-0 hidden md:flex flex-col justify-between bg-white border-r border-coolGray-100 max-w-xs w-9/12 h-full overflow-y-auto">
+            <div className="navbar-menu z-50 fixed top-0 left-0 hidden md:flex flex-col justify-between bg-white border-r border-coolGray-100 w-[17%] h-full overflow-y-auto">
                 {/* Navigation Options */}
                 <div className="relative bg-white">
                     <div className="fixed top-0 left-0 p-6 pb-2 bg-white">
@@ -258,7 +258,7 @@ export function Sidebar(props) {
                 </div>
                 
                 {/* Admin Info Card & Logout Button */}
-                <div className="fixed bottom-0 max-w-xs w-full flex flex-col items-start p-6 justify-between max-w-xs w-9/12 bg-white border-r border-coolGray-100">
+                <div className="fixed bottom-0 flex flex-col items-start p-6 justify-between w-[17%] bg-white border-r border-coolGray-100">
                     <hr className='w-full my-2'/>
                     <div className="flex items-center flex-wrap">
                         <div className="w-fit h-fit p-2">
@@ -276,7 +276,7 @@ export function Sidebar(props) {
                 </div>
             </div>
 
-            <div className="md:ml-60" />
+            <div className="md:ml-40" />
       </section>
     );
 }

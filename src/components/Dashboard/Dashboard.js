@@ -76,7 +76,7 @@ export function Dashboard() {
 
     return (
         <section className="bg-white bg-opacity-0 min-h-[70vh]">
-            <div className="container px-4 mx-auto">
+            <div className="container px-1 mx-auto">
                 <div className='flex-col justify-between md:flex md:flex-row'>
                     <Sidebar setSidebarOption={setSidebarOption}/>
                     <div className='mt-10 md:m-10 md:mt-16 w-full'>
