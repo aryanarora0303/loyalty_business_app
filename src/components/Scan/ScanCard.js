@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { appStore, updateActiveNav } from '../../app/appSlice';
 import { authStore } from '../../app/authSlice';
 import { clientStore, getClientFromDB } from '../../app/clientSlice';
-import { businessStore, getBusinessFromDB } from '../../app/businessSlice';
+import { businessStore, getAllBusinessFromDB } from '../../app/businessSlice';
 import { cardStore, saveCardDetails, verifyCardDetails } from '../../app/cardSlice';
 import { promoStore, getPromoOnScanFromDB } from '../../app/promoSlice';
 
@@ -83,8 +83,8 @@ export function ScanCard(props) {
 
     useEffect(() => {
         dispatch(updateActiveNav(ROUTES.SCAN));
-        dispatch(getClientFromDB({client_name: window.location.hostname.split('-')[1]})); // hostname formatter as admin-CLIENT_NAME e.g. admin-glowbal in admin-glowbal.myloyaltycard.com/
-        dispatch(getBusinessFromDB({client_name: window.location.hostname.split('-')[1]})); // hostname formatter as admin-CLIENT_NAME e.g. admin-glowbal in admin-glowbal.myloyaltycard.com/
+        dispatch(getClientFromDB({client: { name: window.location.hostname.split('-')[1]}})); // hostname formatter as admin-CLIENT_NAME e.g. admin-glowbal in admin-glowbal.myloyaltycard.com/
+        dispatch(getAllBusinessFromDB({client: { name: window.location.hostname.split('-')[1]}})); // hostname formatter as admin-CLIENT_NAME e.g. admin-glowbal in admin-glowbal.myloyaltycard.com/
     }, [dispatch])
 
     useEffect(() => {
@@ -358,8 +358,8 @@ export function ScanCard(props) {
                                 <label className="block mb-1 mr-2 text-coolGray-600 font-medium after:content-['*'] after:ml-0.5 after:text-red-500" htmlFor="">Promos For:</label>
                                     <select ref={businessIdRef} className='py-1 px-2 w-[70%] text-center text-coolGray-900 border border-coolGray-200 rounded-lg shadow-sm placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-loyaltyGold-100 focus:ring-opacity-50 bg-center transition-all'>
                                         <option className='text-center text-coolGray-900' value={0}>All</option>
-                                        {(business.business) ? 
-                                            business.business.map((business, index) =>{
+                                        {(business.allBusiness) ? 
+                                            business.allBusiness.map((business, index) =>{
                                                 return <option className='text-center text-coolGray-900' key={index} value={business.bus_id}>{business.bus_name}</option>
                                             })
                                             : ""

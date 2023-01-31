@@ -32,7 +32,7 @@ export const signIn = createAsyncThunk(
     console.log("authSlice: signIn");
     try {
       const signInResponse = await Auth.signIn({username: param.username, password: param.password});
-      console.log(signInResponse);
+      
       if(signInResponse.challengeName && signInResponse.challengeName === "NEW_PASSWORD_REQUIRED") {
         let user = signInResponse.challengeParam.userAttributes;
         user['temp_password'] = param.password;

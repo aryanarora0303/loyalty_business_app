@@ -18,18 +18,23 @@ export const getClientFromDB = createAsyncThunk(
   async (param) => {
     console.log("clientSlice: getClientFromDB");
     try {
-      let name = param.client_name;
+      let name = param.client.name;
       // ----------------------
       // TODO: REMOVE THIS LINE
       name = 'glowbal'
       // TODO: REMOVE THIS LINE
       // ----------------------
 
+      // Authheaders(jwt token) not required since this request can be called without authentication(i.e. here during scannning)
       const res = await axios.get(`${process.env.REACT_APP_AWS_API_GATEWAY}/get-client-info?authorizer=${process.env.REACT_APP_AWS_API_KEY}&client_name=${name}`);
-      let client = res.data.data.client;
-      client['client_name'] = client.client_name.toLowerCase().split(' ').map(elem => elem[0].toUpperCase()+ elem.slice(1)).join(' ');
-      client['client_image'] = './client-logos/' + client.client_name.replaceAll(' ', '_') + '.png';
-      return {message: "Client extracted from db", type: "success", data: client};
+
+      if(res.data.type === "error") { return {message: "business not extracted from db", type: "error", data: null}; }
+      if(res.data.type === "success") { 
+        let client = res.data.data.client;
+        client['client_name'] = client.client_name.toLowerCase().split(' ').map(elem => elem[0].toUpperCase()+ elem.slice(1)).join(' ');
+        client['client_image'] = './client-logos/' + client.client_name.replaceAll(' ', '_') + '.png';
+        return {message: "Client extracted from db", type: "success", data: client};
+      }
     }
     catch(err) {
       return {message: err.message, type: "error", data: null};

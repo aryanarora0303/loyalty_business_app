@@ -236,11 +236,11 @@ export function Sidebar(props) {
                         {/* Category w/ Options */}
                         <div className="px-4 my-1">
                             <div>
-                                <button id='accounts-sidebar-option-btn' className="sidebar-option-btn p-3 py-2 w-full flex items-center justify-between text-coolGray-400 hover:text-loyaltyGold-100 hover:bg-coolGray-50 rounded-md transition-all"
+                                <button id='account-sidebar-option-btn' className="sidebar-option-btn p-3 py-2 w-full flex items-center justify-between text-coolGray-400 hover:text-loyaltyGold-100 hover:bg-coolGray-50 rounded-md transition-all"
                                     onClick={handleNavOptionClicked}>
                                     <div className="flex items-center">
                                         <i className="fa-solid fa-user text-2xl mr-3"/>
-                                        <p className="text-coolGray-800 font-medium text-base">Accounts</p>
+                                        <p className="text-coolGray-800 font-medium text-base">Account</p>
                                     </div>
                                 </button>
                             </div>
@@ -276,7 +276,7 @@ export function Sidebar(props) {
                 </div>
             </div>
 
-            <div className="md:ml-80" />
+            <div className="md:ml-60" />
       </section>
     );
 }

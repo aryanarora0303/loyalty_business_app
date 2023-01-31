@@ -16,6 +16,11 @@ const initialState = {
   hasCardExtractingFromDBError: false, // True when operation is unsuccessful
   extractingCardFromDBError: null,     // Store the error of the operation
 
+  isAllCardExtractingFromDB: false,       // Loading variable for extracting/getting Card info. from db
+  hasAllCardExtractedFromDB: false,       // True when operation is successful
+  hasAllCardExtractingFromDBError: false, // True when operation is unsuccessful
+  extractingAllCardFromDBError: null,     // Store the error of the operation
+
   isCardDetailsAssigning: false,          // Loading variable for new assign card details
   hasNewCardDetailsAssigned: false,       // True when opteraion is successful
   hasNewCardDetailsAssigningError: false, // True when operation unsuccessful(produces error)
@@ -26,7 +31,8 @@ const initialState = {
   hasCardDetailsVerifyingError: false,  // True when operation unsuccessful(produces error)
   verifyCardDetailsError: null,         // Store the error of the operation
 
-  card: null
+  card: null,
+  allCard: null
 };
 
 // Async Function
@@ -44,10 +50,30 @@ export const getCardFromDB = createAsyncThunk(
       card['invite_link'] = `${window.location.host}/sign-up?invite_code=${card.invite_code}`;
       card['client_image'] = './client-logos/' + card.client_name.replaceAll(' ', '_') + '.png';
       card['card_corner_image'] = './card-types/' + card.card_type + '_card_corner.png';
-      return {message: "Card extracted from db", type: "success", data: res.data.data.card};
+      return { message: "Card extracted from db", type: "success", data: card };
     }
     catch(err) {
-      return {message: err.message, type: "error", data: null};
+      return { message: err.message, type: "error", data: null };
+    }
+  }
+);
+
+export const getAllCardFromDB = createAsyncThunk(
+  'getAllCardFromDB',
+  async (param) => {
+    console.log("cardSlice: getAllCardFromDB");
+    try {
+      let limit = param.card.limit;
+      let authHeaders = {
+        'Authorization': param.session.jwtToken
+      }
+      const res = await axios.get(`${process.env.REACT_APP_AWS_API_GATEWAY}/get-all-card-info?authorizer=${process.env.REACT_APP_AWS_API_KEY}&limit=${limit}`, {headers: authHeaders});
+
+      if(res.data.type === "error") { return { message: "card not extracted from db", type: "error", data: null }; } 
+      if(res.data.type === "success") { return { message: "card extracted from db", type: "success", data: res.data.data.card }; } 
+    }
+    catch(err) {
+      return { message: err.message, type: "error", data: null };
     }
   }
 );
@@ -57,15 +83,14 @@ export const verifyCardDetails = createAsyncThunk(
   async (param) => {
     console.log("cardSlice: verifyCardDetails");
     try {
-      const res = await axios.get(`${process.env.REACT_APP_AWS_API_GATEWAY}/verify-card?authorizer=${process.env.REACT_APP_AWS_API_GATEWAY}&card_id=${param.id}&card_cvc=${param.cvc}`);
-
-      console.log("CARD DETAILS VERIFYING RESPONSE", res.data.type);
+      // Authheaders(jwt token) not required since this request can be called without authentication(i.e. here during scannning)
+      const res = await axios.get(`${process.env.REACT_APP_AWS_API_GATEWAY}/verify-card?authorizer=${process.env.REACT_APP_AWS_API_KEY}&card_id=${param.id}&card_cvc=${param.cvc}`);
       
-      if(res.data.type === "success"){ return {message: "card valid", type: "success", data: res.data.data.card}; }
-      if(res.data.type === "error"){ return {message: "card not valid", type: "error", data: null}; }
+      if(res.data.type === "success"){ return { message: "card valid", type: "success", data: res.data.data.card }; }
+      if(res.data.type === "error"){ return { message: "card not valid", type: "error", data: null }; }
     }
     catch(err) {
-      return {message: err.message, type: "error", data: null};
+      return { message: err.message, type: "error", data: null };
     }
   }
 );
@@ -74,14 +99,15 @@ export const assignNewCardDetails = createAsyncThunk(
   'assignNewCardDetails',
   async (param) => {
     console.log("cardSlice: assignNewCardDetails");
-      try{
+      try {
+        // Authheaders(jwt token) not required since this request can be called without authentication(i.e. here during scannning)
         const res = await axios.get(`${process.env.REACT_APP_AWS_API_GATEWAY}/assign-new-card?authorizer=${process.env.REACT_APP_AWS_API_GATEWAY}`);
         
-        if(res.data.type === "success"){ return {message: "card assigned", type: "success", data: res.data.data.card}; }
-        if(res.data.type === "error"){ return {message: "card not assigned", type: "error", data: null}; }
+        if(res.data.type === "success"){ return { message: "card assigned", type: "success", data: res.data.data.card }; }
+        if(res.data.type === "error"){ return { message: "card not assigned", type: "error", data: null }; }
       }
       catch(err){
-        return {message: err.message, type: "error", data: null};
+        return { message: err.message, type: "error", data: null };
       }
   }
 );
@@ -135,6 +161,39 @@ export const cardSlice = createSlice({
       state.hasCardExtractedFromDB = false;       
       state.hasCardExtractingFromDBError = true; 
       state.extractingCardFromDBError = action.payload.message;
+    });
+
+    // getAllCardFromDB
+    builder.addCase(getAllCardFromDB.pending, (state, action) => {
+      console.log("cardSlice: getCardFromDB Requested");
+      console.log('\t Request Pending', action);
+      state.isAllCardExtractingFromDB = true;
+      state.hasAllCardExtractedFromDB = false;       
+      state.hasAllCardExtractingFromDBError = false; 
+      state.extractingAllCardFromDBError = null;
+    });
+    builder.addCase(getAllCardFromDB.fulfilled, (state, action) => {
+      console.log('\t Request Fulfilled', action);
+      if(action.payload.type === 'error'){ 
+        state.isAllCardExtractingFromDB = false;       
+        state.hasAllCardExtractedFromDB = false;       
+        state.hasAllCardExtractingFromDBError = true; 
+        state.extractingAllCardFromDBError = action.payload.message;    
+      } else {
+        state.allCard = action.payload.data;
+
+        state.isAllCardExtractingFromDB = false;       
+        state.hasAllCardExtractedFromDB = true;       
+        state.hasAllCardExtractingFromDBError = false; 
+        state.extractingAllCardFromDBError = null;
+      }
+    });
+    builder.addCase(getAllCardFromDB.rejected, (state, action) => {
+      console.log('\t Request Rejected', action);
+      state.isAllCardExtractingFromDB = false;       
+      state.hasAllCardExtractedFromDB = false;       
+      state.hasAllCardExtractingFromDBError = true; 
+      state.extractingAllCardFromDBError = action.payload.message;
     });
 
     // verifyCardDetails

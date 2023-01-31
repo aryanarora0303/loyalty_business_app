@@ -5,7 +5,7 @@ import clientReducer from './clientSlice';
 import businessReducer from './businessSlice';
 import customerReducer from './customerSlice';
 import cardReducer from './cardSlice';
-//import scanSlice from './scanSlice';
+import scanReducer from './scanSlice';
 import promoReducer from './promoSlice';
 
 export const store = configureStore({
@@ -16,7 +16,7 @@ export const store = configureStore({
     business: businessReducer,
     customer: customerReducer,
     card: cardReducer,
-    //scan: scanReducer,
+    scan: scanReducer,
     promo: promoReducer
   }
 });
