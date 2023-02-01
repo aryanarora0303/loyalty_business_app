@@ -78,6 +78,42 @@ export function IndBusinessesData(props) {
                 </div>
             </div>
 
+            {/* OverView Awards */}
+            <div className='p-2 mb-6 flex justify-evenly items-center border-2 border-coolGray-200 rounded-md shadow-md transition-all'>
+                <div className=''>
+                    <p className="text-xl text-coolGray-700 font-semibold">Complimentary Dessert</p>
+                    <p className="mb-1 text-md text-coolGray-500 font-medium">Most Popular Promos</p>
+
+                    {/* % difference from last month */}
+                    <div className='flex items-center text-xxs text-loyaltyGold-100'>
+                        <i className="fa-solid fa-medal mr-1"/>
+                        <p className=''>Scanned 5 Times</p>
+                    </div>
+                </div>
+
+                <div className=''>
+                    <p className="text-xl text-coolGray-700 font-semibold">500</p>
+                    <p className="mb-1 text-md text-coolGray-500 font-medium">Highest Reward Points</p>
+
+                    {/* % difference from last month */}
+                    <div className='flex items-center text-xxs text-loyaltyGold-100'>
+                        <i className="fa-solid fa-medal mr-1"/>
+                        <p className=''>Rewarded 500</p>
+                    </div>
+                </div>
+
+                <div className=''>
+                    <p className="text-xl text-coolGray-700 font-semibold">VIP Upgrade</p>
+                    <p className="mb-1 text-md text-coolGray-500 font-medium">Most Popular Promos</p>
+
+                    {/* % difference from last month */}
+                    <div className='flex items-center text-xxs text-loyaltyGold-100'>
+                        <i className="fa-solid fa-medal mr-1"/>
+                        <p className=''>Scanned 2 Times</p>
+                    </div>
+                </div>
+            </div>
+
             {/* TODO: ALL DATA BELOW IS GENERATED FOR PRESENATATION, ADD LOGIC(FRONTEND & BACKEND) FOR ACTUAL DATA */}
             {/* Detailed Charts & Tables */}
             <div>
