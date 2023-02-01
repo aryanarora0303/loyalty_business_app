@@ -10,12 +10,12 @@ import { updateActiveNav } from '../../app/appSlice';
 
 // Components Imports
 import { Sidebar } from '../Navigation/Sidebar';
-import { DashboardData } from './Data/DashboardData';
-import { BusinessesData } from './Data/BusinessesData';
-import { CustomersData } from './Data/CustomersData';
-import { CardsData } from './Data/CardsData';
-import { PromosData } from './Data/PromosData';
-import { ScansData } from './Data/ScansData';
+import { AllDashboardData } from './Data/All/AllDashboardData';
+import { AllBusinessesData } from './Data/All/AllBusinessesData';
+import { AllCustomersData } from './Data/All/AllCustomersData';
+import { AllCardsData } from './Data/All/AllCardsData';
+import { AllPromosData } from './Data/All/AllPromosData';
+import { AllScansData } from './Data/All/AllScansData';
 import { Account } from './Account';
 import { Settings } from './Settings';
 
@@ -45,22 +45,22 @@ export function Dashboard() {
         console.log("COMPONENT Dashboard: sidebarOption changed, set data");
         switch (sidebarOption) {
             case 'DASHBOARD':
-                setData(<DashboardData/>);
+                setData(<AllDashboardData/>);
                 break;
             case 'BUSINESSES':
-                setData(<BusinessesData/>);
+                setData(<AllBusinessesData/>);
                 break;
             case 'CUSTOMERS':
-                setData(<CustomersData/>);
+                setData(<AllCustomersData/>);
                 break;
             case 'CARDS':
-                setData(<CardsData/>);
+                setData(<AllCardsData/>);
                 break;
             case 'PROMOS':
-                setData(<PromosData/>);
+                setData(<AllPromosData/>);
                 break;
             case 'SCANS':
-                setData(<ScansData/>);
+                setData(<AllScansData/>);
                 break;
             case 'ACCOUNT':
                 setData(<Account/>);
@@ -69,7 +69,7 @@ export function Dashboard() {
                 setData(<Settings/>);
                 break;
             default: 
-                setData(<DashboardData/>);
+                setData(<AllDashboardData/>);
                 break;
             }
     }, [sidebarOption])

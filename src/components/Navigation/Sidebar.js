@@ -101,7 +101,7 @@ export function Sidebar(props) {
     return (
         <section className="bg-white bg-opacity-0 min-h-full">
             {/* Hamburger Nav to toggle Sidebar Navigation */}
-            <div className="flex items-center justify-between md:hidden border-b border-coolGray-100 py-5">
+            <div className="px-4 flex items-center justify-between md:hidden border-b border-coolGray-100 py-5">
                 <div className="w-auto">
                     <NavLink className="block max-w-max" to={ROUTES.DASHBOARD}>
                         <img className='h-20' src="./loyalty_logo.png" alt=""/>
