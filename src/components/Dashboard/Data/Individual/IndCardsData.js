@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 
 // Styling Imports
 
-export function IndCardsData() {
+export function IndCardsData(props) {
     useEffect(() => {
         console.log("COMPONENT RENDERED: IndCardsData");
     }, [])

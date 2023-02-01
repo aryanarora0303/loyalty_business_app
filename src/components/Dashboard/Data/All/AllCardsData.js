@@ -29,6 +29,8 @@ export function AllCardsData() {
     const [tableAllDataRows, setTableAllDataRows] = useState();
     const [tableIndDataRow, setTableIndDataRow] = useState();
 
+    const [selectedIndData, setSelectedIndData] = useState();
+
     useEffect(() => {
         console.log("COMPONENT RENDERED: AllCardsData");
     }, [])
@@ -66,6 +68,7 @@ export function AllCardsData() {
         console.log(`COMPONENT AllCardsData: Row Clicked with ID: ${el.currentTarget.id}`);
 
         let row = card.allCard.find(data => String(data.card_id) === el.currentTarget.id);
+        setSelectedIndData(row);
         setTableIndDataRow(
             <tr id={row.card_id} key={0} className="group border-b border-gray-200 cursor-pointer">
                 <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-loyaltyGold-100 text-center transition-all underline">{row.card_id}</td>
@@ -124,7 +127,7 @@ export function AllCardsData() {
                     : ""
                 }
 
-                {(showIndData) ? <IndCardsData/> : "" }
+                {(showIndData) ? <IndCardsData data={selectedIndData}/> : "" }
             </div>
         </section>
     );

@@ -29,6 +29,8 @@ export function AllCustomersData() {
     const [tableAllDataRows, setTableAllDataRows] = useState();
     const [tableIndDataRow, setTableIndDataRow] = useState();
 
+    const [selectedIndData, setSelectedIndData] = useState();
+
     useEffect(() => {
         console.log("COMPONENT RENDERED: AllCustomersData");
     }, [])
@@ -70,6 +72,7 @@ export function AllCustomersData() {
         console.log(`COMPONENT AllCustomersData: Row Clicked with ID: ${el.currentTarget.id}`);
 
         let row = customer.allCustomer.find(data => String(data.customer_id) === el.currentTarget.id);
+        setSelectedIndData(row);
         setTableIndDataRow(
             <tr id={row.customer_id} key={0} className="group border-b border-gray-200 cursor-pointer">
                 <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-loyaltyGold-100 text-center transition-all underline">{row.customer_id}</td>
@@ -136,7 +139,7 @@ export function AllCustomersData() {
                     : ""
                 }
 
-                {(showIndData) ? <IndCustomersData/> : "" }
+                {(showIndData) ? <IndCustomersData data={selectedIndData}/> : "" }
             </div>
         </section>
     );

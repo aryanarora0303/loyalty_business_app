@@ -29,6 +29,8 @@ export function AllPromosData() {
     const [tableAllDataRows, setTableAllDataRows] = useState();
     const [tableIndDataRow, setTableIndDataRow] = useState();
 
+    const [selectedIndData, setSelectedIndData] = useState();
+
     useEffect(() => {
         console.log("COMPONENT RENDERED: AllPromosData");
     }, [])
@@ -71,6 +73,7 @@ export function AllPromosData() {
         console.log(`COMPONENT AllPromosData: Row Clicked with ID: ${el.currentTarget.id}`);
 
         let row = promo.allPromo.find(data => String(data.promo_id) === el.currentTarget.id);
+        setSelectedIndData(row);
         setTableIndDataRow(
             <tr id={row.promo_id} key={0} className="group border-b border-gray-200 cursor-pointer">
                 <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-loyaltyGold-100 text-center transition-all underline">{row.promo_id}</td>
@@ -143,7 +146,7 @@ export function AllPromosData() {
                     : ""
                 }
 
-                {(showIndData) ? <IndPromosData/> : "" }
+                {(showIndData) ? <IndPromosData data={selectedIndData}/> : "" }
             </div>
         </section>
     );

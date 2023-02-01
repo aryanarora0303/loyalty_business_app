@@ -3,6 +3,8 @@ import React from 'react';
 import { useEffect } from 'react';
 
 // Redux Imports
+import { useSelector, useDispatch } from 'react-redux';
+import { authStore, signOut } from '../../app/authSlice';
 
 // Modules Imports
 import { NavLink } from "react-router-dom";
@@ -16,6 +18,10 @@ import * as ROUTES from '../../constants/routes';
 import './Sidebar.css';
 
 export function Sidebar(props) {
+    const auth = useSelector(authStore);
+
+    const dispatch = useDispatch();
+
     useEffect(() => {
         console.log("COMPONENT RENDERED: SideBar");
 
@@ -264,12 +270,15 @@ export function Sidebar(props) {
                         <div className="w-fit h-fit p-2">
                             <i className="fa-solid fa-user text-coolGray-400 text-3xl"/>
                         </div>
-                        <div className="w-auto p-2">
-                            <h2 className="text-sm font-semibold text-coolGray-800">John Doe</h2>
-                            <p className="text-sm font-medium text-coolGray-500">johndoe@flex.co</p>
-                        </div>
+                        {(auth.isAuthenticated) ? 
+                            <div className="w-auto p-2">
+                                <h2 className="text-sm font-semibold text-coolGray-800">{auth.user.name}</h2>
+                                <p className="text-sm font-medium text-coolGray-500">{auth.user.email}</p>
+                            </div>
+                            : ""
+                        }
                     </div>
-                    <button className='flex items-center justify-center p-2 my-2 w-full text-white bg-loyaltyGold-100 hover:bg-loyaltyGold-200 focus:ring-2 focus:ring-loyaltyGold-100 focus:ring-opacity-50 rounded-md shadow-md hover:shadow-lg transition-all'>
+                    <button className='flex items-center justify-center p-2 my-2 w-full text-white bg-loyaltyGold-100 hover:bg-loyaltyGold-200 focus:ring-2 focus:ring-loyaltyGold-100 focus:ring-opacity-50 rounded-md shadow-md hover:shadow-lg transition-all' onClick={() => {dispatch(signOut())}}>
                         <i className="fa-solid fa-arrow-right-from-bracket text-lg mr-3"/>
                         <p className="text-md font-semibold">Sign Out</p>
                     </button>

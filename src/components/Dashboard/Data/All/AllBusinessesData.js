@@ -29,6 +29,8 @@ export function AllBusinessesData() {
     const [tableAllDataRows, setTableAllDataRows] = useState();
     const [tableIndDataRow, setTableIndDataRow] = useState();
 
+    const [selectedIndData, setSelectedIndData] = useState();
+
     useEffect(() => {
         console.log("COMPONENT RENDERED: AllBusinessesData");
     }, [])
@@ -58,6 +60,7 @@ export function AllBusinessesData() {
         console.log(`COMPONENT AllBusinessesData: Row Clicked with ID: ${el.currentTarget.id}`);
 
         let row = business.allBusiness.find(data => String(data.bus_id) === el.currentTarget.id);
+        setSelectedIndData(row);
         setTableIndDataRow(
             <tr id={row.bus_id} key={0} className="group border-b border-gray-200 cursor-pointer">
                 <td className="py-2 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-loyaltyGold-200 text-center transition-all underline">{row.bus_id}</td>
@@ -110,7 +113,7 @@ export function AllBusinessesData() {
                     : ""
                 }
 
-                {(showIndData) ? <IndBusinessesData/> : "" }
+                {(showIndData) ? <IndBusinessesData data={selectedIndData}/> : "" }
             </div>
         </section>
     );

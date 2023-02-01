@@ -26,7 +26,6 @@ import * as ROUTES from '../../constants/routes';
 import './Dashboard.css';
 
 export function Dashboard() {
-
     const dispatch = useDispatch();
 
     const [sidebarOption, setSidebarOption] = useState('DASHBOARD');

@@ -29,6 +29,8 @@ export function AllScansData() {
     const [tableAllDataRows, setTableAllDataRows] = useState();
     const [tableIndDataRow, setTableIndDataRow] = useState();
 
+    const [selectedIndData, setSelectedIndData] = useState();
+
     useEffect(() => {
         console.log("COMPONENT RENDERED: AllScansData");
     }, [])
@@ -67,6 +69,7 @@ export function AllScansData() {
         console.log(`COMPONENT AllScansData: Row Clicked with ID: ${el.currentTarget.id}`);
         
         let row = scan.allScan.find(data => String(data.scan_id) === el.currentTarget.id);
+        setSelectedIndData(row);
         setTableIndDataRow(
             <tr id={row.scan_id} key={0} className="group border-b border-gray-200 cursor-pointer">
                 <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-loyaltyGold-100 text-center transition-all underline">{row.scan_id}</td>
@@ -127,7 +130,7 @@ export function AllScansData() {
                     : ""
                 }
 
-                {(showIndData) ? <IndScansData/> : "" }
+                {(showIndData) ? <IndScansData data={selectedIndData}/> : "" }
             </div>
         </section>
     );

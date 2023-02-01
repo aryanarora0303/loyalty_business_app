@@ -50,6 +50,7 @@ function App() {
     }
 
     if(app.nav.activeLink !== ROUTES.DASHBOARD) {
+      setShowNavBar(true);
       setAppStyleForDashboard('w-11/12 sm:w-10/12 lg:9/12 max-w-7xl');
     }
   }, [app.nav.activeLink, auth.isAuthenticated])
