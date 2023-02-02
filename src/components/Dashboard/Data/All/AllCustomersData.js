@@ -104,7 +104,7 @@ export function AllCustomersData() {
                 <h2 className="mb-1 text-xl text-loyaltyGold-100 font-semibold">All Customers</h2>
                 <hr className='mb-2 w-1/4 border-[1.25px] border-loyaltyGold-100 border-opacity-50'/>
             </div>
-            <div className="p-6 bg-white border border-coolGray-100 rounded-md shadow-md">
+            <div className="p-6 mb-6 bg-white border border-coolGray-100 rounded-md shadow-md">
                 {(showIndData) ? <div className="w-fit mb-4 p-2 flex items-center text-md text-coolGray-400 hover:text-loyaltyGold-100 font-semibold transition-all cursor-pointer" onClick={handleRowBackBtnClick}><i className="mr-2 fa-solid fa-arrow-left text-xl"/>Back</div> : ""}
                 {(showAllData) ? <input className='float-right mb-4 py-1 px-2 text-coolGray-600 outline-none border-2 border-coolGray-200 focus:border-loyaltyGold-100 active:border-loyaltyGold-100 rounded-md shadow-sm transition-all' type="text" placeholder='Search...' /> : ""}
                 <table className="table-fixed overflow-x-scroll w-full border-collapse">
@@ -138,9 +138,8 @@ export function AllCustomersData() {
                     </div>    
                     : ""
                 }
-
-                {(showIndData) ? <IndCustomersData data={selectedIndData}/> : "" }
             </div>
+            {(showIndData) ? <IndCustomersData data={selectedIndData}/> : "" }
         </section>
     );
 }

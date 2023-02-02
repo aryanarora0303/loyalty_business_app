@@ -112,7 +112,6 @@ export function AllBusinessesData() {
                     </div>    
                     : ""
                 }
-
             </div>
             
             {(showIndData) ? <IndBusinessesData data={selectedIndData}/> : "" }
