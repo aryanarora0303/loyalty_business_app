@@ -28,7 +28,30 @@ export function AllDashboardData() {
                 <h2 className="mb-1 text-xl text-loyaltyGold-100 font-semibold">Dashboard</h2>
                 <hr className='mb-2 w-1/4 border-[1.25px] border-loyaltyGold-100 border-opacity-50'/>
             </div>
-            <div className="p-6 bg-white border border-coolGray-100 rounded-md shadow-md">
+            <div className="p-6 bg-white border border-coolGray-100 rounded-md shadow-md overflow-hidden">
+                <div className="flex items-start justify-center">
+                    <img className='h-[350px]' src='./demo-data-charts/chart_1.png' alt='Chart #1' />
+                </div>
+                <hr className='mx-3 my-10'/>
+                <div className="flex items-start justify-evenly">
+                    <img className='h-[350px]' src='./demo-data-charts/chart_6.png' alt='Chart #2' />
+                    <img className='h-[350px]' src='./demo-data-charts/chart_3.png' alt='Chart #1' />
+                </div>
+                <hr className='mx-3 my-10'/>
+                <div className="flex items-start justify-evenly">
+                    <img className='h-[330px]' src='./demo-data-charts/chart_8.png' alt='Chart #2' />
+                    <img className='h-[330px]' src='./demo-data-charts/chart_2.png' alt='Chart #2' />
+                </div>
+                <hr className='mx-3 my-10'/>
+                <div className="flex items-start justify-evenly">
+                    <img className='h-[400px]' src='./demo-data-charts/chart_5.png' alt='Chart #1' />
+                </div>
+                <hr className='mx-3 my-10'/>
+                <div className="flex items-start justify-evenly">
+                    <img className='h-[390px]' src='./demo-data-charts/chart_4.png' alt='Chart #2' />
+                    <img className='h-[390px]' src='./demo-data-charts/chart_7.png' alt='Chart #1' />
+                </div>
+                <hr className='mx-3 my-10'/>
             </div>
         </section>
     );
