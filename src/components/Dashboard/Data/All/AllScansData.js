@@ -47,17 +47,22 @@ export function AllScansData() {
 
     useEffect(() => {
         if(scan.hasAllScanExtractedFromDB){
+            // TODO: REMOVE THIS ARRAY
+            let businesses = ["RILEY'S FISH AND GRILL", "TRATTORIA", "COAST", "FIVE SAILS", "THE ROOF", "BLACK + BLUE VANCOUVER", "BLACK + BLUE TORONTO", "GLOWBAL", "ITALIAN KITCHEN", "TRATTORIA"];
+            let promos = ["COMPLEMENTARY DESSERT", "BOGO DRINKS", "20% OFF STARTERS", "20% OFF STARTERS", "20% OFF STARTERS", "20% OFF STARTERS", "30% OFF DESSERTS", "30% OFF DESSERTS", "30% OFF DESSERTS", "30% OFF DESSERTS", "30% OFF DESSERTS", "30% OFF DESSERTS", "30% OFF DESSERTS", "30% OFF DESSERTS", "30% OFF DESSERTS",]
             let rows = scan.allScan.map((scan, index) => {
                 return (
                     <tr id={scan.scan_id} key={index} className="group border-b border-gray-200 cursor-pointer" onClick={handleRowClick}>
                         <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-loyaltyGold-100 text-center transition-all underline">{scan.scan_id}</td>
                         <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{scan.scan_time}</td>
                         <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{scan.scan_type}</td>
-                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{scan.client_id}</td>
-                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{scan.bus_id}</td>
+                        {/* <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{scan.client_id}</td> */}
+                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">GLOWBAL</td>
+                        {/* <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{scan.bus_id}</td> */}
+                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{businesses[scan.bus_id]}</td>
                         <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{scan.customer_id}</td>
                         <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{scan.card_id}</td>
-                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{scan.promo_id}</td>
+                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promos[scan.promo_id]}</td>
                     </tr>
                 )
             })

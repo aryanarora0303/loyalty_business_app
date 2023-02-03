@@ -47,21 +47,25 @@ export function AllPromosData() {
 
     useEffect(() => {
         if(promo.hasAllPromoExtractedFromDB){
+            // TODO: REMOVE THIS ARRAY
+            let businesses = ["RILEY'S FISH AND GRILL", "TRATTORIA", "COAST", "FIVE SAILS", "THE ROOF", "BLACK + BLUE VANCOUVER", "BLACK + BLUE TORONTO", "GLOWBAL", "ITALIAN KITCHEN", "TRATTORIA"];
             let rows = promo.allPromo.map((promo, index) => {
                 return (
                     <tr id={promo.promo_id} key={index} className="group border-b border-gray-200 cursor-pointer" onClick={handleRowClick}>
                         <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-loyaltyGold-100 text-center transition-all underline">{promo.promo_id}</td>
-                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.client_id}</td>
-                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.bus_id}</td>
-                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.card_id}</td>
-                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.event_promo}</td>
-                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.gold_promo}</td>
-                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.platinum_promo}</td>
-                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.titanium_promo}</td>
-                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.custom_promo}</td>
+                        {/* <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.client_id}</td> */}
+                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">GLOWBAL</td>
+                        {/* <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.bus_id}</td> */}
+                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{businesses[promo.bus_id]}</td>
+                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{(promo.card_id) ?  promo.card_id : "-"}</td>
+                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{(promo.event_promo) ? promo.event_promo : "-"}</td>
+                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{(promo.gold_promo) ? promo.gold_promo : "-"}</td>
+                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{(promo.platinum_promo) ? promo.platinum_promo : "-"}</td>
+                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{(promo.titanium_promo) ? promo.titanium_promo : "-"}</td>
+                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{(promo.custom_promo) ? promo.custom_promo : "-"}</td>
                         <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.date_valid_from}</td>
                         <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.date_valid_to}</td>
-                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.custom_promo_validity}</td>
+                        {/* <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.custom_promo_validity}</td> */}
                     </tr>
                 )
             })
@@ -117,7 +121,8 @@ export function AllPromosData() {
                             <th rowSpan={2} className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">BUSINESS ID</th>
                             <th rowSpan={2} className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">CARD ID</th>
                             <th colSpan={5} className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">PROMO</th>
-                            <th colSpan={3} className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">VALIDITY</th>
+                            {/* <th colSpan={3} className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">VALIDITY</th> */}
+                            <th colSpan={2} className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">VALIDITY</th>
                         </tr>
                         <tr className="bg-coolGray-50 border-2 border-t-[1px] border-coolGray-200 rounded-md shadow-sm">
                             <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">EVENT</th>
@@ -127,7 +132,7 @@ export function AllPromosData() {
                             <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">CUSTOM</th>
                             <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">FROM</th>
                             <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">TO</th>
-                            <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">CUSTOM</th>
+                            {/* <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">CUSTOM</th> */}
                         </tr>
                         {(showAllData) ? tableAllDataRows : ""}
                         {(showIndData) ? tableIndDataRow : ""}

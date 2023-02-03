@@ -128,17 +128,17 @@ export function IndBusinessesData(props) {
                                 <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200 rounded-l-md">ID</th>
                                 <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">TIME</th>
                                 <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">SCAN TYPE</th>
-                                <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">GROUP ID</th>
-                                <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">BUSINESS ID</th>
+                                <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">GROUP</th>
+                                <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">BUSINESS</th>
                                 <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">CUSTOMER ID</th>
                                 <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">CARD ID</th>
-                                <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">PROMO ID</th>
+                                <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">PROMO</th>
                             </tr>
                             {[
-                                {bus_id: 1, card_id:  "00A1002", client_id: 1, customer_id: "1", promo_id: 1, scan_id:  1, scan_time:  "2023-02-03 11:33:00", scan_type: "PHYSICAL"},
-                                {bus_id: 1, card_id:  "00A1004", client_id: 1, customer_id: "2", promo_id: 5, scan_id:  2, scan_time:  "2023-02-03 09:41:00", scan_type: "DIGITAL"},
-                                {bus_id: 1, card_id:  "00A1062", client_id: 1, customer_id: "3", promo_id: 6, scan_id:  3, scan_time:  "2023-02-03 09:43:00", scan_type: "PHYSICAL"},
-                                {bus_id: 1, card_id:  "00A1089", client_id: 1, customer_id: "4", promo_id: 8, scan_id:  4, scan_time:  "2023-02-03 11:30:00", scan_type: "DIGITAL"},
+                                {bus_id: "BLACK + BLUE VANCOUVER", card_id:  "00A1002", client_id: "GLOWBAL", customer_id: "1", promo_id: "COMPLIMENTARY DESSERT", scan_id:  1, scan_time:  "2023-02-03 11:33:00", scan_type: "PHYSICAL"},
+                                {bus_id: "BLACK + BLUE VANCOUVER", card_id:  "00A1004", client_id: "GLOWBAL", customer_id: "2", promo_id: "BOGO DRINKS", scan_id:  2, scan_time:  "2023-02-03 09:41:00", scan_type: "DIGITAL"},
+                                {bus_id: "BLACK + BLUE VANCOUVER", card_id:  "00A1062", client_id: "GLOWBAL", customer_id: "3", promo_id: "20% OFF SIGN UP", scan_id:  3, scan_time:  "2023-02-03 09:43:00", scan_type: "PHYSICAL"},
+                                {bus_id: "BLACK + BLUE VANCOUVER", card_id:  "00A1089", client_id: "GLOWBAL", customer_id: "4", promo_id: "30% OFF STARTERS", scan_id:  4, scan_time:  "2023-02-03 11:30:00", scan_type: "DIGITAL"},
                             ].map((scan, index) => {
                                 return(
                                     <tr id={scan.scan_id} key={index} className="group border-b border-gray-200 cursor-pointer">
@@ -170,7 +170,7 @@ export function IndBusinessesData(props) {
                                 <th rowSpan={2} className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">BUSINESS ID</th>
                                 <th rowSpan={2} className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">CARD ID</th>
                                 <th colSpan={5} className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">PROMO</th>
-                                <th colSpan={3} className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">VALIDITY</th>
+                                <th colSpan={2} className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">VALIDITY</th>
                             </tr>
                             <tr className="bg-coolGray-50 border-2 border-t-[1px] border-coolGray-200 rounded-md shadow-sm">
                                 <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">EVENT</th>
@@ -180,17 +180,16 @@ export function IndBusinessesData(props) {
                                 <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">CUSTOM</th>
                                 <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">FROM</th>
                                 <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">TO</th>
-                                <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">CUSTOM</th>
                             </tr>
                             {[
-                                {bus_id: 1, card_id: "A1B2C3D", client_id: 1, custom_promo: null, custom_promo_validity: null, date_valid_from: "2023-01-01", date_valid_to: "2023-01-15", event_promo: "30%_DISCOUNT", gold_promo: "COMPLIMENTARY_APPETIZER", platinum_promo: null, promo_id: 5, titanium_promo: null},
-                                {bus_id: 1, card_id: "E4F5G6H", client_id: 1, custom_promo: "3_FOR_2_DEAL", custom_promo_validity: "2023-02-05", date_valid_from: "2023-01-15", date_valid_to: "2023-02-01", event_promo: null, gold_promo: "COMPLIMENTARY_DRINK", platinum_promo: "PREMIUM_UPGRADE", promo_id: 1, titanium_promo: null},
-                                {bus_id: 1, card_id: "I7J8K9L", client_id: 1, custom_promo: null, custom_promo_validity: null, date_valid_from: "2023-01-20", date_valid_to: "2023-02-10", event_promo: "25%_DISCOUNT", gold_promo: null, platinum_promo: "LUXURY_TREATMENT", promo_id: 3, titanium_promo: "EXCLUSIVE_MENU"},
-                                {bus_id: 1, card_id: "M0N1O2P", client_id: 1, custom_promo: "WEEKEND_DEAL", custom_promo_validity: "2023-02-15", date_valid_from: "2023-01-10", date_valid_to: "2023-02-05", event_promo: null, gold_promo: "COMPLIMENTARY_DESSERT", platinum_promo: null, promo_id: 2, titanium_promo: null},
-                                {bus_id: 1, card_id: "Q3R4S5T", client_id: 1, custom_promo: null, custom_promo_validity: null, date_valid_from: "2023-01-05", date_valid_to: "2023-02-15", event_promo: "20%_DISCOUNT", gold_promo: "COMPLIMENTARY_WINE", platinum_promo: "VIP_UPGRADE", promo_id: 4, titanium_promo: null},
-                                {bus_id: 1, card_id: "E4F5G6H", client_id: 1, custom_promo: "3_FOR_2_DEAL", custom_promo_validity: "2023-02-05", date_valid_from: "2023-01-15", date_valid_to: "2023-02-01", event_promo: null, gold_promo: "COMPLIMENTARY_DRINK", platinum_promo: "PREMIUM_UPGRADE", promo_id: 1, titanium_promo: null},
-                                {bus_id: 1, card_id: "I7J8K9L", client_id: 1, custom_promo: null, custom_promo_validity: null, date_valid_from: "2023-01-20", date_valid_to: "2023-02-10", event_promo: "25%_DISCOUNT", gold_promo: null, platinum_promo: "LUXURY_TREATMENT", promo_id: 3, titanium_promo: "EXCLUSIVE_MENU"},
-                                {bus_id: 1, card_id: "M0N1O2P", client_id: 1, custom_promo: "WEEKEND_DEAL", custom_promo_validity: "2023-02-15", date_valid_from: "2023-01-10", date_valid_to: "2023-02-05", event_promo: null, gold_promo: "COMPLIMENTARY_DESSERT", platinum_promo: null, promo_id: 2, titanium_promo: null},
+                                {bus_id: "BLACK + BLUE VANCOUVER", card_id: "A1B2C3D", client_id: "GLOWBAL", custom_promo: "-", custom_promo_validity: "-", date_valid_from: "2023-01-01", date_valid_to: "2023-01-15", event_promo: "30%_DISCOUNT", gold_promo: "COMPLIMENTARY_APPETIZER", platinum_promo: "-", promo_id: 5, titanium_promo: "-"},
+                                {bus_id: "BLACK + BLUE VANCOUVER", card_id: "E4F5G6H", client_id: "GLOWBAL", custom_promo: "3_FOR_2_DEAL", custom_promo_validity: "2023-02-05", date_valid_from: "2023-01-15", date_valid_to: "2023-02-01", event_promo: "-", gold_promo: "COMPLIMENTARY_DRINK", platinum_promo: "PREMIUM_UPGRADE", promo_id: 1, titanium_promo: "-"},
+                                {bus_id: "BLACK + BLUE VANCOUVER", card_id: "I7J8K9L", client_id: "GLOWBAL", custom_promo: "-", custom_promo_validity: "-", date_valid_from: "2023-01-20", date_valid_to: "2023-02-10", event_promo: "25%_DISCOUNT", gold_promo: "-", platinum_promo: "LUXURY_TREATMENT", promo_id: 3, titanium_promo: "EXCLUSIVE_MENU"},
+                                {bus_id: "BLACK + BLUE VANCOUVER", card_id: "M0N1O2P", client_id: "GLOWBAL", custom_promo: "WEEKEND_DEAL", custom_promo_validity: "2023-02-15", date_valid_from: "2023-01-10", date_valid_to: "2023-02-05", event_promo: "-", gold_promo: "COMPLIMENTARY_DESSERT", platinum_promo: "-", promo_id: 2, titanium_promo: "-"},
+                                {bus_id: "BLACK + BLUE VANCOUVER", card_id: "Q3R4S5T", client_id: "GLOWBAL", custom_promo: "-", custom_promo_validity: "-", date_valid_from: "2023-01-05", date_valid_to: "2023-02-15", event_promo: "20%_DISCOUNT", gold_promo: "COMPLIMENTARY_WINE", platinum_promo: "VIP_UPGRADE", promo_id: 4, titanium_promo: "-"},
+                                {bus_id: "BLACK + BLUE VANCOUVER", card_id: "E4F5G6H", client_id: "GLOWBAL", custom_promo: "3_FOR_2_DEAL", custom_promo_validity: "2023-02-05", date_valid_from: "2023-01-15", date_valid_to: "2023-02-01", event_promo: "-", gold_promo: "COMPLIMENTARY_DRINK", platinum_promo: "PREMIUM_UPGRADE", promo_id: 1, titanium_promo: "-"},
+                                {bus_id: "BLACK + BLUE VANCOUVER", card_id: "I7J8K9L", client_id: "GLOWBAL", custom_promo: "-", custom_promo_validity: "-", date_valid_from: "2023-01-20", date_valid_to: "2023-02-10", event_promo: "25%_DISCOUNT", gold_promo: "-", platinum_promo: "LUXURY_TREATMENT", promo_id: 3, titanium_promo: "EXCLUSIVE_MENU"},
+                                {bus_id: "BLACK + BLUE VANCOUVER", card_id: "M0N1O2P", client_id: "GLOWBAL", custom_promo: "WEEKEND_DEAL", custom_promo_validity: "2023-02-15", date_valid_from: "2023-01-10", date_valid_to: "2023-02-05", event_promo: "-", gold_promo: "COMPLIMENTARY_DESSERT", platinum_promo: "-", promo_id: 2, titanium_promo: "-"},
                             ].map((promo, index) => {
                                 return(
                                     <tr id={promo.promo_id} key={index} className="group border-b border-gray-200 cursor-pointer">
@@ -205,7 +204,6 @@ export function IndBusinessesData(props) {
                                         <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.custom_promo}</td>
                                         <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.date_valid_from}</td>
                                         <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.date_valid_to}</td>
-                                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{promo.custom_promo_validity}</td>
                                     </tr>
                                 )
                             })}
@@ -222,7 +220,6 @@ export function IndBusinessesData(props) {
                         <tbody>
                             <tr className="bg-coolGray-50 border-2 border-coolGray-200 rounded-md shadow-sm">
                                 <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200 rounded-l-md">ID</th>
-                                <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">GROUP ID</th>
                                 <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">NAME</th>
                                 <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">PHONE</th>
                                 <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200">EMAIL</th>
@@ -234,18 +231,17 @@ export function IndBusinessesData(props) {
                                 <th className="py-3 font-semibold text-xs truncate text-coolGray-800 uppercase text-center border-[1px] border-coolGray-200 rounded-r-md">MONEY SPENT</th>
                             </tr>
                             {[
-                                {address: "159 Maple St, Anytown USA", client_id: 1, customer_id: "10", email: "lisa@icloud.com", full_name: "LISA", member_since: "2022-11-29", money_spent: 0, num_referred: 2, phone_number: "7783337785", reward_points: 100, verification: 1},
-                                {address: "753 Cedar St, Anytown USA", client_id: 1, customer_id: "11", email: "john@icloud.com", full_name: "JOHN", member_since: "2022-11-30", money_spent: 0, num_referred: 5, phone_number: "7783337786", reward_points: 200, verification: 1},
-                                {address: "123 Main St, Anytown USA", client_id: 1, customer_id: "5", email: "mikedoe@icloud.com", full_name: "MIKE DOE", member_since: "2022-11-24", money_spent: 0, num_referred: 3, phone_number: "7783337780", reward_points: 0, verification: 1},
-                                {address: "456 Elm St, Anytown USA", client_id: 1, customer_id: "6", email: "katedoe@icloud.com", full_name: "KATE DOE", member_since: "2022-11-25", money_spent: 0, num_referred: 2, phone_number: "7783337781", reward_points: 5000, verification: 1},,
-                                {address: "789 Oak St, Anytown USA", client_id: 1, customer_id: "7", email: "bryandoe@icloud.com", full_name: "BRYAN DOE", member_since: "2022-11-26", money_spent: 0, num_referred: 0, phone_number: "7783337782", reward_points: 1500, verification: 1},
-                                {address: "246 Pine St, Anytown USA", client_id: 1, customer_id: "8", email: "amandadoe@icloud.com", full_name: "AMANDA DOE", member_since: "2022-11-27", money_spent: 0, num_referred: 0, phone_number: "7783337783", reward_points: 7500, verification: 1},
-                                {address: "369 Cedar St, Anytown USA", client_id: 1, customer_id: "9", email: "daviddoe@icloud.com", full_name: "DAVID DOE", member_since: "2022-11-28", money_spent: 0, num_referred: 7, phone_number: "7783337784", reward_points: 900, verification: 1}
+                                {address: "159 Maple St, Anytown USA", client_id: 1, customer_id: "10", email: "lisa@icloud.com", full_name: "LISA", member_since: "2022-11-29", money_spent: 0, num_referred: 2, phone_number: "7783337785", reward_points: 100, verification: "COMPLETE"},
+                                {address: "753 Cedar St, Anytown USA", client_id: 1, customer_id: "11", email: "john@icloud.com", full_name: "JOHN", member_since: "2022-11-30", money_spent: 0, num_referred: 5, phone_number: "7783337786", reward_points: 200, verification: "COMPLETE"},
+                                {address: "123 Main St, Anytown USA", client_id: 1, customer_id: "5", email: "mikedoe@icloud.com", full_name: "MIKE DOE", member_since: "2022-11-24", money_spent: 0, num_referred: 3, phone_number: "7783337780", reward_points: 0, verification: "COMPLETE"},
+                                {address: "456 Elm St, Anytown USA", client_id: 1, customer_id: "6", email: "katedoe@icloud.com", full_name: "KATE DOE", member_since: "2022-11-25", money_spent: 0, num_referred: 2, phone_number: "7783337781", reward_points: 5000, verification: "COMPLETE"},,
+                                {address: "789 Oak St, Anytown USA", client_id: 1, customer_id: "7", email: "bryandoe@icloud.com", full_name: "BRYAN DOE", member_since: "2022-11-26", money_spent: 0, num_referred: 0, phone_number: "7783337782", reward_points: 1500, verification: "COMPLETE"},
+                                {address: "246 Pine St, Anytown USA", client_id: 1, customer_id: "8", email: "amandadoe@icloud.com", full_name: "AMANDA DOE", member_since: "2022-11-27", money_spent: 0, num_referred: 0, phone_number: "7783337783", reward_points: 7500, verification: "COMPLETE"},
+                                {address: "369 Cedar St, Anytown USA", client_id: 1, customer_id: "9", email: "daviddoe@icloud.com", full_name: "DAVID DOE", member_since: "2022-11-28", money_spent: 0, num_referred: 7, phone_number: "7783337784", reward_points: 900, verification: "COMPLETE"}
                             ].map((customer, index) => {
                                 return(
                                     <tr id={customer.customer_id} key={index} className="group border-b border-gray-200 cursor-pointer">
                                         <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-loyaltyGold-100 text-center transition-all underline">{customer.customer_id}</td>
-                                        <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{customer.client_id}</td>
                                         <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{customer.full_name}</td>
                                         <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{customer.phone_number}</td>
                                         <td className="py-4 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{customer.email}</td>

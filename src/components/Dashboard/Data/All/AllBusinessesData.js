@@ -47,7 +47,8 @@ export function AllBusinessesData() {
                     <tr id={business.bus_id} key={index} className="group border-b border-gray-200 cursor-pointer" onClick={handleRowClick}>
                         <td className="py-2 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-loyaltyGold-200 text-center transition-all underline">{business.bus_id}</td>
                         <td className="py-2 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all"><img className='p-1 h-14 m-auto border-[1px] border-loyaltyGold-100 rounded-full' src={business.bus_image} alt='business logo'/></td>
-                        <td className="py-2 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{business.client_id}</td>
+                        {/* <td className="py-2 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{business.client_id}</td> */}
+                        <td className="py-2 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">GLOWBAL</td>
                         <td className="py-2 px-3 bg-white group-hover:bg-coolGray-50 text-sm truncate font-medium text-coolGray-600 text-center transition-all">{business.bus_name}</td>
                     </tr>
                 )
