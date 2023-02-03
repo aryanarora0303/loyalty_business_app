@@ -32,7 +32,7 @@ export const getClientFromDB = createAsyncThunk(
       if(res.data.type === "success") { 
         let client = res.data.data.client;
         client['client_name'] = client.client_name.toLowerCase().split(' ').map(elem => elem[0].toUpperCase()+ elem.slice(1)).join(' ');
-        client['client_image'] = './client-logos/' + client.client_name.replaceAll(' ', '_') + '.png';
+        client['client_image'] = './client-logos/' + client.client_name.replaceAll(' ', '_').toUpperCase() + '.png';
         return {message: "Client extracted from db", type: "success", data: client};
       }
     }
