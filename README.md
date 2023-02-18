@@ -4,7 +4,7 @@ Loyalty Pass provides a customized loyalty program solution for restaurants. Wit
 
 Meanwhile, restaurants can monitor their customers' activities, such as spending and eating habits, points earned and redeemed, referrals, favorite restaurant, and favorite offer. By leveraging this valuable customer data, restaurants can offer personalized deals and incentives that are tailored to each individual customer's preferences and behavior. This not only increases customer engagement and establishes trust, but also enhances the overall restaurant experience.
 
-View here: https://glowbal.myloyaltycard.ca/sign-in
+View here: https://admin-glowbal.myloyaltycard.ca/scan
 
 <img src="https://github.com/aryanarora0303/Projects-Media/blob/main/LoyaltyPass/1%20LoyatyBusiness%20Restaurant_View_Offers.jpg" style="width: 100%; height: auto;" alt="Image description">
 <img src="https://github.com/aryanarora0303/Projects-Media/blob/main/LoyaltyPass/1%20LoyatyBusiness%20Restaurant_View_Offers.jpg" style="width: 100%; height: auto;" alt="Image description">
